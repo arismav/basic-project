@@ -1,0 +1,7 @@
+<div class="menu-container d-flex align-items-center justify-content-center flex-column">
+    <ng-container *ngFor="let menuItem of menu">
+        <button mat-button class="w-100" routerLink="{{menuItem.routerLink}}" routerLinkActive="active">
+            {{menuItem.label | translate}}
+        </button>
+    </ng-container>
+</div>

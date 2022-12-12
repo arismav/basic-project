@@ -1,0 +1,52 @@
+<mat-toolbar>
+    <ng-content></ng-content>
+    <span routerLink="/dashboard">{{'dashboard.header.title' | translate}}</span>
+    <span class="example-spacer"></span>
+
+
+
+
+    <div class="flex-stretch"></div>
+    <mat-icon class="mr-8">brightness_5</mat-icon>
+    <mat-slide-toggle (change)="toggleDarkMode($event)" class="mr-8">
+    </mat-slide-toggle>
+    <mat-icon>bedtime</mat-icon>
+
+
+    <button mat-icon-button [matMenuTriggerFor]="lang">
+        <mat-icon>language</mat-icon>
+    </button>
+
+    <mat-menu #lang="matMenu">
+        <ng-container *ngFor="let lang of langs | keyvalue">
+            <button mat-menu-item (click)="switchLang($event)"
+                [ngClass]=" lang.key === currentLang ? 'activebutton' : ''" [value]="lang.key">
+                {{lang.key}}
+            </button>
+        </ng-container>
+
+    </mat-menu>
+
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>account_circle</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu">
+        <mat-card class="example-card">
+            <!-- <mat-card-title>{{authUser.email}}</mat-card-title> -->
+            <mat-card-subtitle>{{authUser.email}}</mat-card-subtitle>
+            <!-- <mat-card-content>
+                <p>This card indeterminates progress bar.</p>
+            </mat-card-content> -->
+            <mat-card-actions class="d-flex justify-content-center">
+                <button mat-button class="favorite-icon" (click)="logout()" aria-label="Icon-button with heart icon">
+                    {{'dashboard.header.profile.logout' | translate}}
+                    <mat-icon>logout</mat-icon>
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </mat-menu>
+
+
+
+</mat-toolbar>

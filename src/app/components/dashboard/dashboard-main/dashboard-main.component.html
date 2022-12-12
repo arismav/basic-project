@@ -1,0 +1,16 @@
+<div class="container-fluid p-0 h-100 d-flex flex-column">
+    <app-header>
+        <button mat-icon-button aria-label="Icon-button with menu icon" (click)="drawer.toggle()">
+            <mat-icon *ngIf="!drawer.opened">menu</mat-icon>
+            <mat-icon *ngIf="drawer.opened">close</mat-icon>
+        </button>
+    </app-header>
+    <div class="container-fluid main-container p-0">
+        <mat-drawer-container class="drawer-container h-100" autosize>
+            <mat-drawer #drawer class="drawer-sidenav p-3" mode="side" drawer>
+                <app-sidenav></app-sidenav>
+            </mat-drawer>
+            <router-outlet></router-outlet>
+        </mat-drawer-container>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+{
+    "dashboard": {
+        "header": {
+            "title": "Εφαρμογή",
+            "profile": {
+                "logout": "Αποσύνδεση"
+            }
+        },
+        "sidenav": {
+            "users": "Χρήστες",
+            "data-table": "Πίνακας δεδομένων",
+            "profiles": "Προφίλ"
+        }
+    }
+}

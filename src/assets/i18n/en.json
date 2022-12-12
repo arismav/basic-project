@@ -1,0 +1,15 @@
+{
+    "dashboard": {
+        "header": {
+            "title" : "Mav's app",
+            "profile": {
+                "logout" : "Logout"
+            }
+        },
+        "sidenav" : {
+            "users" : "Users",
+            "data-table": "Data table",
+            "profiles" : "Profiles"
+        }
+    }
+}
