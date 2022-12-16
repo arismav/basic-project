@@ -1,4 +1,3 @@
-<h1>Data Table Container</h1>
 <ng-container *ngIf="!isLoading">
     <app-data-table 
     [dataSource]="dataSource" 
@@ -6,3 +5,4 @@
     [displayedColumns]="displayedColumns"
     (deleteEvent)="deleteRow($event)"></app-data-table>
 </ng-container>
+<mat-spinner *ngIf="isLoading"></mat-spinner>

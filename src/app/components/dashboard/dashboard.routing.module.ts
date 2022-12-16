@@ -24,6 +24,10 @@ const routes: Routes = [
         component: DataTableContainerComponent
       },
       {
+        path: 'data-table/view',
+        component: DataTableViewComponent
+      },
+      {
         path: 'data-table/view/:id',
         component: DataTableViewComponent
       }

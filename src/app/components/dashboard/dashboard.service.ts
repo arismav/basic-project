@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { IEntries } from 'src/app/models/entry.model';
 import { StyleManagerService } from 'src/app/style-manager.service';
 import { IThemeOption, IThemeOptions } from '../../models/theme-option.model';
@@ -38,7 +38,14 @@ export class DashboardService {
 
 
   getTableData(): Observable<any> {
-    return this._http.get(this.tableDataUrl);
+    return this._http.get(this.tableDataUrl).pipe(
+      map((res: any, index: number) => {
+        console.log(res);
+        const newRes = { ...res };
+        newRes["entries"].map((entry: any, index: number) => entry.id = index);
+        return newRes;
+      }),
+    )
   }
 
 

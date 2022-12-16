@@ -1,1 +1,126 @@
-<p>data-table-view works!</p>
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center">
+            <h2>Entry {{isEditMode ? 'Edit' : 'Add'}}</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 justify-content-end d-flex">
+            <button mat-button mat-raised-button color="warn" routerLink="/dashboard/data-table">
+                <mat-icon>arrow_back</mat-icon>Back
+            </button>
+        </div>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="row">
+            <div class="col-md-6 col-sm-12 d-flex flex-column">
+                <mat-form-field appearance="standard">
+                    <mat-label>Id</mat-label>
+                    <input matInput placeholder="Id" formControlName="id">
+                </mat-form-field>
+
+                <mat-form-field appearance="standard">
+                    <mat-label>Api</mat-label>
+                    <input matInput placeholder="Type api name" formControlName="API">
+                    <mat-error
+                        *ngIf="form.get('API')?.invalid && (form.get('API')?.dirty || form.get('API')?.touched) && form.get('API')?.errors?.['required']">
+                        Api is required
+                    </mat-error>
+                    <mat-error *ngIf="form.get('API')?.errors?.['minlength'] && !form.get('API')?.errors?.['required']">
+                        Api must be at least 2 characters
+                    </mat-error>
+                    <mat-error *ngIf="form.get('API')?.errors?.['maxlength'] && !form.get('API')?.errors?.['required']">
+                        Api must be max 10 characters
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="standard">
+                    <mat-label>Auth</mat-label>
+                    <mat-select formControlName="Auth" name="auth">
+                        <mat-option *ngFor="let option of authOptions" [value]="option">
+                            {{option}}
+                        </mat-option>
+                    </mat-select>
+                    <!-- <mat-error
+                        *ngIf="form.get('Auth')?.invalid && (form.get('Auth')?.dirty || form.get('Auth')?.touched) && form.get('Auth')?.errors?.['required']">
+                        Auth is required
+                    </mat-error> -->
+                </mat-form-field>
+                <mat-form-field appearance="standard">
+                    <mat-label>Category</mat-label>
+                    <mat-select formControlName="Category" name="category">
+                        <mat-option *ngFor="let option of categories" [value]="option">
+                            {{option}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="form.get('Category')?.invalid && (form.get('Category')?.dirty || form.get('Category')?.touched) && form.get('Category')?.errors?.['required']">
+                        Category is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-6 col-sm-12 d-flex flex-column">
+                <mat-form-field appearance="standard">
+                    <mat-label>Cors</mat-label>
+                    <mat-select formControlName="Cors" name="Cors">
+                        <mat-option [value]="'yes'">
+                            yes
+                        </mat-option>
+                        <mat-option [value]="'no'">
+                            no
+                        </mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="form.get('Cors')?.invalid && (form.get('Cors')?.dirty || form.get('Cors')?.touched) && form.get('Cors')?.errors?.['required']">
+                        Cors is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="standard">
+                    <mat-label>Description</mat-label>
+                    <input matInput formControlName="Description" placeholder="Type description">
+                    <mat-error
+                        *ngIf="form.get('Description')?.invalid && (form.get('Description')?.dirty || form.get('Description')?.touched) && form.get('Description')?.errors?.['required']">
+                        Description is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="standard">
+                    <mat-label>Https</mat-label>
+                    <mat-select formControlName="HTTPS" name="Https">
+                        <mat-option [value]="true">
+                            true
+                        </mat-option>
+                        <mat-option [value]="false">
+                            false
+                        </mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="form.get('HTTPS')?.invalid && (form.get('HTTPS')?.dirty || form.get('HTTPS')?.touched) && form.get('HTTPS')?.errors?.['required']">
+                        HTTPS is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="standard">
+                    <mat-label>Link</mat-label>
+                    <input matInput formControlName="Link" placeholder="Type link">
+                    <mat-error
+                        *ngIf="form.get('Link')?.invalid && (form.get('Link')?.dirty || form.get('Link')?.touched) && form.get('Link')?.errors?.['required']">
+                        Link is required
+                    </mat-error>
+                    <mat-error
+                        *ngIf="!form.get('Link')?.errors?.['required'] && form.get('Link')?.errors?.['validUrl']">
+                        Link has not a valid pattern
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <button mat-raised-button class="my-5 w-100" color="primary" type="submit"
+                    [disabled]="!form.valid">Submit</button>
+            </div>
+        </div>
+    </form>
+    <!-- <div>{{ form.value | json }}</div> -->
+</div>

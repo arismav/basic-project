@@ -1,5 +1,8 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MatOption } from '@angular/material/core';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { map } from 'rxjs/operators';
@@ -14,23 +17,30 @@ import { DashboardService } from '../dashboard.service';
 })
 export class DataTableComponent implements OnInit {
 
+  public selected = -1;
+  allSelected=true;
   public isLoading: boolean = false;
   // public ELEMENT_DATA: any = [];
   public filterSelectObj: any = [];
   public filterValues: any = {};
   public searchApplied: boolean = false;
   public tableIsLoaded: boolean = false;
-  
+  displayColumn = new FormControl();
+  // searchUserForm: FormGroup= new FormGroup();
+  displayedColumnsSelection: string[] = [];
+
 
   public searchText: string = '';
 
   // public displayedColumns: string[] = ['id', 'API', 'Category', 'HTTPS', 'Actions'];
   // public dataSource = new MatTableDataSource();
-
+  // @ViewChild('allSelected') private allSelected: MatOption = new MatOption();
   @Input() displayedColumns: string[] = [];
   @Input() dataSource = new MatTableDataSource();
   @Input() tableData: any;
   @Output() deleteEvent = new EventEmitter<number>();
+
+  @ViewChild('select') select!: MatSelect ;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator = new MatPaginator(new MatPaginatorIntl(), ChangeDetectorRef.prototype);
   @ViewChild('sortEl', { static: false }) sortEl = new MatSort();
@@ -47,6 +57,11 @@ export class DataTableComponent implements OnInit {
         options: []
       },
       {
+        name: 'Auth',
+        columnProp: 'Auth',
+        options: []
+      },
+      {
         name: 'HTTPS',
         columnProp: 'HTTPS',
         options: []
@@ -58,9 +73,15 @@ export class DataTableComponent implements OnInit {
     // this.getTableData();
   }
 
+  ngOnChanges(): void {
+    this.displayedColumnsSelection = [...this.displayedColumns]
+  }
+
   ngAfterViewInit(): void {
+    console.log(this.displayColumn);
     console.log(this.dataSource);
     console.log(this.tableData);
+    this.displayColumn = new FormControl(this.displayedColumnsSelection);
     // this.ELEMENT_DATA = this.dataSource.data;
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sortEl;
@@ -71,7 +92,7 @@ export class DataTableComponent implements OnInit {
     });
     this.dataSource.filterPredicate = this.createFilter();
     this.isLoading = false;
-    this._ch.detectChanges();
+    // this._ch.detectChanges();
   }
 
   // Get Uniqu values from columns to build filter
@@ -195,12 +216,47 @@ export class DataTableComponent implements OnInit {
     this.dataSource.filter = "";
   }
 
-  deleteRow(id:number) {
+  deleteRow(id: number) {
     // console.log(id);
     // console.log(this.tableData);
     // const newTableData = this.tableData.filter((data:any) => data.id !== id);
     // this._dashboardService.setTableDataStore(newTableData);
     this.deleteEvent.emit(id);
+  }
+
+  /*checkbox change event*/
+  onChange(event: any) {
+    // console.log(event);
+    // console.log(event)
+    // this.displayedColumns = this.displayedColumns.filter((col) => {
+    //   console.log(col);
+    //   if (col === event) console.log('here');
+    //   return col !== event;
+    // });
+    // console.log(this.displayedColumns);
+  }
+  handleSelected(option: string, selected: boolean, index: number) {
+    console.log(option)
+    console.log(selected);
+    console.log(index);
+    if (selected) {
+      // this.displayedColumns.push(option);
+      this.displayedColumns.splice(index, 0, option);
+    } else {
+      this.displayedColumns = this.displayedColumns.filter((col) => col !== option);
+    }
+    console.log(this.displayedColumns);
+  }
+
+  toggleAllSelection() {
+    if (this.allSelected) {
+      this.select.options.forEach((item: MatOption) => {
+        this.displayedColumns = this.displayedColumnsSelection;
+        item.select()});
+    } else {
+      this.displayedColumns = [];
+      this.select.options.forEach((item: MatOption) => item.deselect());
+    }
   }
 
 }

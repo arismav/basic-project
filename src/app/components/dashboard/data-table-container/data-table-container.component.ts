@@ -11,7 +11,7 @@ import * as fromApp from '../../../store/reducers/app.reducer';
   styleUrls: ['./data-table-container.component.scss']
 })
 export class DataTableContainerComponent implements OnInit {
-  public isLoading: boolean = true;
+  public isLoading: boolean = false;
   public tableData: any = [];
   public filterSelectObj: any = [];
   public filterValues: any = {};
@@ -39,9 +39,14 @@ export class DataTableContainerComponent implements OnInit {
 
     this._store.select('datatable').subscribe((data:any) => {
       console.log(data);
+      // this.isLoading = true;
       if (data.entries) {
         this.dataSource.data = [...data.entries];
         this.tableData = [...data.entries];
+        // setTimeout(() => {
+        //   this.isLoading = false;
+        // }, 1000);
+       
         // this._ch.detectChanges();
       } else {
         console.log('here');
@@ -54,14 +59,6 @@ export class DataTableContainerComponent implements OnInit {
   getTableData = () => {
     this.isLoading = true;
     this._dashboardService.getTableData()
-      .pipe(
-        map((res: any, index: number) => {
-          console.log(res);
-          const newRes = { ...res };
-          newRes["entries"].map((entry: any, index: number) => entry.id = index);
-          return newRes;
-        })
-      )
       .subscribe((res: any) => {
         this.dataSource.data = res["entries"];
         this.tableData = res["entries"];

@@ -8,7 +8,7 @@ import { HeaderComponent } from './header/header.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { UsersComponent } from './users/users.component';
 import { TranslateModule } from '@ngx-translate/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DataTableComponent } from './data-table/data-table.component';
 import { FilterdataPipe } from 'src/app/helpers/pipes/filterdata.pipe';
 import { DataTableViewComponent } from './data-table-view/data-table-view.component';
@@ -31,7 +31,8 @@ import { DataTableContainerComponent } from './data-table-container/data-table-c
     MaterialModule,
     DashboardRoutingModule,
     TranslateModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: []

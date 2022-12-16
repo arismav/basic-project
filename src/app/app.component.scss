@@ -3,3 +3,7 @@
     left: calc(50% - 50px);
     position: absolute !important;
 }
+
+::ng-deep .mat-icon:hover {
+    cursor: pointer !important;
+}
