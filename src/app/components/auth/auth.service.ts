@@ -4,10 +4,12 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
+import { LogOut } from 'src/app/store/actions/authenticate.actions';
+import { AppState } from 'src/app/store/app.states';
 import { User } from '../../models/user.model';
 
-import * as fromApp from '../../store/reducers/app.reducer';
-import * as AuthActions from './store/auth.actions';
+// import * as fromApp from '../../store/reducers/app.reducer';
+import * as AuthActions from '../../store/actions/auth.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -22,13 +24,13 @@ export class AuthService {
     private _http: HttpClient,
     private _firebaseAuth: AngularFireAuth,
     private _router: Router,
-    private store: Store<fromApp.AppState>
+    private _store: Store<AppState>
   ) {
 
   }
 
   login(email: string, password: string) {
-    return this._firebaseAuth.signInWithEmailAndPassword(email, password)
+    return this._firebaseAuth.signInWithEmailAndPassword(email, password);
   }
 
 
@@ -40,7 +42,8 @@ export class AuthService {
     return this._firebaseAuth.signOut().then(() => {
       localStorage.removeItem('user');
       //this.user.next(null);
-      this.store.dispatch(new AuthActions.Logout())
+      // this.store.dispatch(new AuthActions.Logout())
+      this._store.dispatch(new LogOut);
       this._router.navigate(['/auth']);
     });
   }
@@ -75,12 +78,14 @@ export class AuthService {
 
     if (loadedUser.token) {
       //this.user.next(loadedUser);
-      this.store.dispatch(new AuthActions.Login({
-        email: loadedUser.email,
-        userId: loadedUser.id,
-        token: loadedUser.token
-      }
-      ))
+
+
+      // this.store.dispatch(new AuthActions.Login({
+      //   email: loadedUser.email,
+      //   userId: loadedUser.id,
+      //   token: loadedUser.token
+      // }
+      // ))
 
       // const expirationDuration =
       //   new Date(userData._tokenExpirationDate).getTime() -
@@ -99,13 +104,13 @@ export class AuthService {
     //const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
     const user = new User(email, userId, token);
     //this.user.next(user);
-    this.store.dispatch(new AuthActions.Login(
-      {
-        email: user.email,
-        userId: user.id,
-        token: user.token
-      }
-    ))
+    // this.store.dispatch(new AuthActions.Login(
+    //   {
+    //     email: user.email,
+    //     userId: user.id,
+    //     token: user.token
+    //   }
+    // ))
     //this.autoLogout(expiresIn * 1000);
     localStorage.setItem('user', JSON.stringify(user));
   }

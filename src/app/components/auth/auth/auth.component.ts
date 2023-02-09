@@ -8,8 +8,10 @@ import { AuthService } from '../auth.service';
 })
 export class AuthComponent implements OnInit {
 
+  public isLogin: boolean = true;
+
   constructor(
-    private _authService : AuthService
+    private _authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -17,11 +19,17 @@ export class AuthComponent implements OnInit {
 
   changeTab(e: any) {
     console.log(e.index);
-    if(e.index === 1)
-    this._authService.setSwitchLoginMode(false)
+    if (e.index === 1) {
+      this.isLogin = false;
+      this._authService.setSwitchLoginMode(false)
 
-    if(e.index === 0)
-    this._authService.setSwitchLoginMode(true)
+    }
+
+    if (e.index === 0) {
+      this.isLogin = true;
+      this._authService.setSwitchLoginMode(true)
+
+    }
   }
 
 }

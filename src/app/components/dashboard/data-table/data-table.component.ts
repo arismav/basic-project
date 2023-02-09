@@ -15,32 +15,28 @@ import { DashboardService } from '../dashboard.service';
   styleUrls: ['./data-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DataTableComponent implements OnInit {
+export class DataTableComponent implements OnInit, OnChanges, AfterViewInit {
 
   public selected = -1;
-  allSelected=true;
-  public isLoading: boolean = false;
-  // public ELEMENT_DATA: any = [];
+  public allSelected = true;
+  public isLoading = false;
+  // public isLoading: boolean = false;
   public filterSelectObj: any = [];
   public filterValues: any = {};
   public searchApplied: boolean = false;
   public tableIsLoaded: boolean = false;
   displayColumn = new FormControl();
-  // searchUserForm: FormGroup= new FormGroup();
   displayedColumnsSelection: string[] = [];
 
 
   public searchText: string = '';
 
-  // public displayedColumns: string[] = ['id', 'API', 'Category', 'HTTPS', 'Actions'];
-  // public dataSource = new MatTableDataSource();
-  // @ViewChild('allSelected') private allSelected: MatOption = new MatOption();
   @Input() displayedColumns: string[] = [];
+  @Input() tableData: IEntry[] = [];
   @Input() dataSource = new MatTableDataSource();
-  @Input() tableData: any;
   @Output() deleteEvent = new EventEmitter<number>();
 
-  @ViewChild('select') select!: MatSelect ;
+  @ViewChild('select') select!: MatSelect;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator = new MatPaginator(new MatPaginatorIntl(), ChangeDetectorRef.prototype);
   @ViewChild('sortEl', { static: false }) sortEl = new MatSort();
@@ -70,68 +66,59 @@ export class DataTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.getTableData();
+    console.log('here 1')
   }
 
   ngOnChanges(): void {
-    this.displayedColumnsSelection = [...this.displayedColumns]
+    // this.isLoading = true;
+    console.log('ONCHANGES')
+    this.displayedColumnsSelection = [...this.displayedColumns];
+    console.log(this.dataSource.data)
+    // if(this.dataSource.data.length > 0){
+    //   this.isLoading = false;
+    // }
+    this.setTableFilters();
+
+
+    this.displayColumn = new FormControl(this.displayedColumnsSelection);
+
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sortEl;
+
+    this.dataSource.filterPredicate = this.createFilter();
   }
 
   ngAfterViewInit(): void {
-    console.log(this.displayColumn);
-    console.log(this.dataSource);
-    console.log(this.tableData);
     this.displayColumn = new FormControl(this.displayedColumnsSelection);
-    // this.ELEMENT_DATA = this.dataSource.data;
+
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sortEl;
-    // console.log(this.ELEMENT_DATA);
-    this.filterSelectObj.filter((o: any) => {
-      console.log(o);
-      o.options = this.getFilterObject(this.tableData, o.columnProp);
-    });
+
     this.dataSource.filterPredicate = this.createFilter();
-    this.isLoading = false;
-    // this._ch.detectChanges();
+
+    // this.isLoading = false;
+  }
+
+  setTableFilters() {
+    this.filterSelectObj.filter((o: any) => {
+      // console.log(o);
+      o.options = this.getFilterObject(this.dataSource.data, o.columnProp);
+    });
   }
 
   // Get Uniqu values from columns to build filter
   getFilterObject(fullObj: any, key: any) {
     const uniqChk: any = [];
+    // console.log(fullObj);
     fullObj.filter((obj: any) => {
       if (!uniqChk.includes(obj[key])) {
         uniqChk.push(obj[key]);
       }
       return obj;
     });
+    // console.log(uniqChk);
     return uniqChk;
   }
-
-  // getTableData = () => {
-  //   this.isLoading = true;
-  //   this._dashboardService.getTableData()
-  //     .pipe(
-  //       map((res: any, index: number) => {
-  //         console.log(res);
-  //         const newRes = { ...res };
-  //         newRes["entries"].map((entry: any, index: number) => entry.id = index);
-  //         return newRes;
-  //       })
-  //     )
-  //     .subscribe((res: any) => {
-  //       this.dataSource.data = res["entries"];
-  //       this.ELEMENT_DATA = res["entries"];
-  //       this.dataSource.paginator = this.paginator;
-  //       this.dataSource.sort = this.sortEl;
-  //       this.filterSelectObj.filter((o: any) => {
-  //         console.log(o);
-  //         o.options = this.getFilterObject(this.ELEMENT_DATA, o.columnProp);
-  //       });
-  //       this.dataSource.filterPredicate = this.createFilter();
-  //       this.isLoading = false;
-  //     });
-
-  // }
 
   applyFilter = (event: Event) => {
     this.searchApplied = true;
@@ -217,46 +204,32 @@ export class DataTableComponent implements OnInit {
   }
 
   deleteRow(id: number) {
-    // console.log(id);
-    // console.log(this.tableData);
-    // const newTableData = this.tableData.filter((data:any) => data.id !== id);
-    // this._dashboardService.setTableDataStore(newTableData);
     this.deleteEvent.emit(id);
   }
 
-  /*checkbox change event*/
-  onChange(event: any) {
-    // console.log(event);
-    // console.log(event)
-    // this.displayedColumns = this.displayedColumns.filter((col) => {
-    //   console.log(col);
-    //   if (col === event) console.log('here');
-    //   return col !== event;
-    // });
-    // console.log(this.displayedColumns);
-  }
   handleSelected(option: string, selected: boolean, index: number) {
-    console.log(option)
-    console.log(selected);
-    console.log(index);
     if (selected) {
-      // this.displayedColumns.push(option);
       this.displayedColumns.splice(index, 0, option);
     } else {
       this.displayedColumns = this.displayedColumns.filter((col) => col !== option);
     }
-    console.log(this.displayedColumns);
+    this.displayedColumns.length !== this.displayedColumnsSelection.length ? this.allSelected = false : this.allSelected = true;
+    // console.log(this.displayedColumns);
   }
 
   toggleAllSelection() {
     if (this.allSelected) {
+      this.allSelected = true;
       this.select.options.forEach((item: MatOption) => {
         this.displayedColumns = this.displayedColumnsSelection;
-        item.select()});
+        item.select()
+      });
     } else {
+      this.allSelected = false;
       this.displayedColumns = [];
       this.select.options.forEach((item: MatOption) => item.deselect());
     }
+
   }
 
 }

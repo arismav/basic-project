@@ -1,4 +1,5 @@
 export interface IEntry {
+    id: number
     API: string,
     Auth: string,
     Category: string

@@ -1,9 +1,12 @@
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
 import { DashboardService } from '../dashboard.service';
-import * as fromApp from '../../../store/reducers/app.reducer';
+// import * as fromApp from '../../../store/reducers/app.reducer';
+import { IEntry } from 'src/app/models/entry.model';
+import { selectEntries } from 'src/app/store/selectors/entries.selector';
+import { deleteEntryAPISuccess, invokeDeleteEntryAPI, invokeEntriesAPI } from 'src/app/store/actions/entries.actions';
 
 @Component({
   selector: 'app-data-table-container',
@@ -18,62 +21,33 @@ export class DataTableContainerComponent implements OnInit {
   public searchApplied: boolean = false;
   public tableIsLoaded: boolean = false;
   public displayedColumns: string[] = ['id', 'API', 'Category', 'HTTPS', 'Actions'];
-  public dataSource = new MatTableDataSource();
+  public dataSource: any = new MatTableDataSource();
+  public entries$ = this._store.pipe(select(selectEntries));
 
   constructor(
-    private _dashboardService: DashboardService,
-    private _ch: ChangeDetectorRef,
-    private _store: Store<fromApp.AppState>
+    private _store: Store
   ) { }
 
   ngOnInit(): void {
-    // this._dashboardService.getTableDataStore().subscribe((data) => {
-    //   console.log(data);
-    //   if (data) {
-    //     this.dataSource.data = data;
-    //     this.tableData = data;
-    //   } else {
-    //     this.getTableData();
-    //   }
-    // })
+    // this.isLoading = true;
+    console.log('here');
+    console.log(this.dataSource);
+    this._store.dispatch(invokeEntriesAPI());
 
-    this._store.select('datatable').subscribe((data:any) => {
-      console.log(data);
-      // this.isLoading = true;
-      if (data.entries) {
-        this.dataSource.data = [...data.entries];
-        this.tableData = [...data.entries];
-        // setTimeout(() => {
-        //   this.isLoading = false;
-        // }, 1000);
-       
-        // this._ch.detectChanges();
-      } else {
-        console.log('here');
-        this.getTableData();
-      }
+    this.entries$.subscribe((entries) => {
+      // this.isLoading = false;
+      this.dataSource = new MatTableDataSource(entries);
+      // this.dataSource = {...this.dataSource, data:[...entries]};
+      // this.dataSource._updateChangeSubscription();
+      // this.dataSource = {...this.dataSource}
+      // this.tableData = [...entries];
+      console.log(this.dataSource);
     })
-
-  }
-
-  getTableData = () => {
-    this.isLoading = true;
-    this._dashboardService.getTableData()
-      .subscribe((res: any) => {
-        this.dataSource.data = res["entries"];
-        this.tableData = res["entries"];
-        this.isLoading = false;
-        console.log(this.tableData);
-        this._ch.detectChanges();
-        this._dashboardService.setTableDataStore(this.tableData);
-      });
-
   }
 
   deleteRow(event: number) {
-    console.log(event);
-    const newTableData = this.tableData.filter((data: any) => data.id !== event);
-    this._dashboardService.setTableDataStore(newTableData);
+    // console.log(event);
+    this._store.dispatch(invokeDeleteEntryAPI({ deleteEntryId: event }));
   }
 
 }

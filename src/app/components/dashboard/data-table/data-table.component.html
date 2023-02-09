@@ -5,7 +5,7 @@
         <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
     </mat-form-field>
 
-    <div class="custom-filters d-flex justify-content-center align-items-center flex-wrap my-3">
+    <div class="custom-filters d-flex justify-content-end align-items-center flex-wrap my-3">
         <div class="filters-container d-flex align-items-center flex-wrap justify-content-center">
             <mat-form-field appearance="outline" *ngFor="let filter of filterSelectObj" class="form-field">
                 <mat-label>Filter {{filter.name}}</mat-label>
@@ -22,26 +22,31 @@
             </button>
         </div>
     </div>
+    <div class="row">
+        <div class="col-12 justify-content-end d-flex">
+            <mat-form-field appearance="outline">
+                <mat-label>Columns</mat-label>
+                <mat-select #select [formControl]="displayColumn" multiple>
+                    <div class="select-all">
+                        <mat-checkbox [(ngModel)]="allSelected" [ngModelOptions]="{standalone: true}"
+                            (change)="toggleAllSelection()">Select All
+                        </mat-checkbox>
+                    </div>
+                    <mat-option #matOption *ngFor="let col of displayedColumnsSelection; let i =index"
+                        (click)="handleSelected(col, matOption.selected, i)" [value]="col">
+                        {{col}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+
     <div class="table-header d-flex align-items-center flex-row justify-content-between p-2">
         <h2 class="m-0 text-center">Angular Material Table</h2>
         <button mat-button mat-raised-button color="primary" routerLink="view">
             <mat-icon>add</mat-icon>Add item
         </button>
-        <!-- <form [formGroup]="searchUserForm"> -->
-        <mat-form-field appearance="fill">
-            <mat-label>Columns</mat-label>
-            <mat-select #select [formControl]="displayColumn" multiple>
-                <mat-option #matOption *ngFor="let col of displayedColumnsSelection; let i =index" (onSelectionChange)="onChange($event)" (click)="handleSelected(col, matOption.selected, i)" [value]="col">
-                    {{col}}
-                </mat-option>
-                <div class="select-all">
-                    <mat-checkbox [(ngModel)]="allSelected"
-                                    [ngModelOptions]="{standalone: true}"
-                                    (change)="toggleAllSelection()">Select All</mat-checkbox>
-                </div>
-            </mat-select>
-        </mat-form-field>
-        <!-- </form> -->
+
     </div>
     <div class="table-responsive">
         <table table-striped mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort #sortEl="matSort">
@@ -57,14 +62,14 @@
                         {{ emp[column] }}
                     </ng-container>
                     <ng-container *ngIf="column =='Actions'">
-                        <mat-icon class="m-1">more_horiz</mat-icon>
+                        <mat-icon class="m-1" routerLink="view/{{emp.id}}" [queryParams]="{viewMode: true}">more_horiz
+                        </mat-icon>
                         <mat-icon class="m-1 blue-fill" routerLink="view/{{emp.id}}">edit</mat-icon>
                         <mat-icon class="m-1 red-fill" (click)="deleteRow(emp.id)">delete_outline</mat-icon>
                     </ng-container>
                 </td>
             </ng-container>
-            <ng-container *ngIf="!isLoading">
-                <!-- Row shown when there is no matching data. -->
+            <ng-container>
                 <tr class="mat-row" *matNoDataRow>
                     <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
                 </tr>
@@ -74,7 +79,7 @@
 
         </table>
     </div>
-    <mat-paginator class="mat-elevation-z8" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-        aria-label="Select page of periodic elements">
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
     </mat-paginator>
 </div>
+<!-- <mat-spinner *ngIf="isLoading"></mat-spinner> -->

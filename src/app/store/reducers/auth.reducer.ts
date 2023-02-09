@@ -1,6 +1,6 @@
 
 import { User } from '../../models/user.model';
-import * as AuthActions from '../../components/auth/store/auth.actions';
+import * as AuthActions from '../actions/auth.actions';
 
 export interface State {
   user: User | null;

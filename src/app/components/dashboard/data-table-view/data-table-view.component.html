@@ -6,7 +6,7 @@
     </div>
     <div class="row">
         <div class="col-12 justify-content-end d-flex">
-            <button mat-button mat-raised-button color="warn" routerLink="/dashboard/data-table">
+            <button mat-button mat-raised-button color="warn" (click)="backToEntries()">
                 <mat-icon>arrow_back</mat-icon>Back
             </button>
         </div>
@@ -115,7 +115,7 @@
                 </mat-form-field>
             </div>
         </div>
-        <div class="row justify-content-center">
+        <div *ngIf="!isViewMode" class="row justify-content-center">
             <div class="col-md-3 col-sm-6 col-xs-12">
                 <button mat-raised-button class="my-5 w-100" color="primary" type="submit"
                     [disabled]="!form.valid">Submit</button>

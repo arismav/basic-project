@@ -22,24 +22,36 @@ import { HeaderComponent } from './components/dashboard/header/header.component'
 import { MaterialModule } from './material.module';
 import { AuthComponent } from './components/auth/auth/auth.component';
 import { StoreModule } from '@ngrx/store';
-import * as fromApp from './store/reducers/app.reducer';
+// import * as fromApp from './store/reducers/app.reducer';
+import * as fromApp from './store/reducers/authenticate.reducer'
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { customTranslate } from './helpers/translate/customTranslate.loader';
 import { NotFoundComponent } from './components/shared/not-found/not-found.component';
 import { StyleManagerService } from './style-manager.service';
-
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+// import { appReducer } from './store/reducers/app.reducer';
+import { DialogComponent } from './components/shared/dialog/dialog.component';
+import { authenticationReducer } from './store/reducers/authentication.reducer';
+import { AuthenticationEffect } from './store/effects/authentication.effect';
+import { AuthenticateEffects } from './store/effects/authenticate.effect';
+import { reducers } from './store/app.states';
 @NgModule({
   declarations: [
     AppComponent,
     AuthComponent,
     SignInComponent,
     LoadingSpinnerComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    DialogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot(fromApp.appReducer),
+    // StoreModule.forRoot(fromApp.appReducer),
+    StoreModule.forRoot({}),
+    StoreModule.forFeature('appState', reducers.auth),
+    EffectsModule.forRoot([AuthenticateEffects]),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
@@ -60,6 +72,12 @@ import { StyleManagerService } from './style-manager.service';
         deps: [HttpClient], // Dependencies which helps serving loader
       }
     }),
+   
+    // EffectsModule.forRoot([]),
+    // StoreModule.forFeature([reducers]),
+    EffectsModule.forFeature([AuthenticationEffect]),
+    StoreDevtoolsModule.instrument(),
+    
 
   ],
   providers: [StyleManagerService],

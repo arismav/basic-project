@@ -13,6 +13,10 @@ import { DataTableComponent } from './data-table/data-table.component';
 import { FilterdataPipe } from 'src/app/helpers/pipes/filterdata.pipe';
 import { DataTableViewComponent } from './data-table-view/data-table-view.component';
 import { DataTableContainerComponent } from './data-table-container/data-table-container.component';
+import { StoreModule } from '@ngrx/store';
+import { entriesReducer } from 'src/app/store/reducers/entries.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { EntriesEffect } from 'src/app/store/effects/entries.effect';
 
 
 @NgModule({
@@ -32,7 +36,9 @@ import { DataTableContainerComponent } from './data-table-container/data-table-c
     DashboardRoutingModule,
     TranslateModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    StoreModule.forFeature('myentries', entriesReducer),
+    EffectsModule.forFeature([EntriesEffect])
   ],
   providers: [],
   bootstrap: []

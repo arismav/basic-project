@@ -29,7 +29,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private _authService: AuthService,
-    private _store: Store<fromApp.AppState>,
+    // private _store: Store<fromApp.AppState>,
     private _translateService: TranslateService,
     private _dashboardService: DashboardService,
     private _overlay: OverlayContainer
@@ -37,17 +37,17 @@ export class HeaderComponent implements OnInit {
 
 
 
-    this._store.select('auth')
-      .pipe(
-        take(1),
-        map((authState) => {
-          return authState.user;
-        })
-      )
-      .subscribe((user) => {
-        console.log(user);
-        this.authUser = user;
-      });
+    // this._store.select('auth')
+    //   .pipe(
+    //     take(1),
+    //     map((authState) => {
+    //       return authState.user;
+    //     })
+    //   )
+    //   .subscribe((user) => {
+    //     console.log(user);
+    //     this.authUser = user;
+    //   });
 
     this._translateService.addLangs(Object.keys(this.langs));
     this._translateService.setDefaultLang('en');

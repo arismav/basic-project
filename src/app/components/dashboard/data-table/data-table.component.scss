@@ -67,3 +67,11 @@ th {
 .red-fill {
     color: #df0000;
 }
+
+.select-all {
+    padding: 0 16px;
+}
+
+::ng-deep .select-all mat-checkbox {
+    line-height: 3em !important;
+}
