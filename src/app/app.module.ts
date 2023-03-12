@@ -8,20 +8,19 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { environment } from 'src/environments/environment';
-
 import { LoadingSpinnerComponent } from './components/shared/loading-spinner/loading-spinner.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { SignInComponent } from './components/auth/sing-in/sign-in.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { DashboardMainComponent } from './components/dashboard/dashboard-main/dashboard-main.component';
 import { HeaderComponent } from './components/dashboard/header/header.component';
 import { MaterialModule } from './material.module';
 import { AuthComponent } from './components/auth/auth/auth.component';
-import { StoreModule } from '@ngrx/store';
+import { ActionReducer, ActionReducerMap, MetaReducer, State, StoreModule } from '@ngrx/store';
 // import * as fromApp from './store/reducers/app.reducer';
 import * as fromApp from './store/reducers/authenticate.reducer'
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -32,10 +31,22 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 // import { appReducer } from './store/reducers/app.reducer';
 import { DialogComponent } from './components/shared/dialog/dialog.component';
-import { authenticationReducer } from './store/reducers/authentication.reducer';
-import { AuthenticationEffect } from './store/effects/authentication.effect';
+// import { authenticationReducer } from './store/reducers/authentication.reducer';
+// import { AuthenticationEffect } from './store/effects/authentication.effect';
 import { AuthenticateEffects } from './store/effects/authenticate.effect';
-import { reducers } from './store/app.states';
+import { AppState, reducers } from './store/app.states';
+import { HttpResponseInterceptor } from './interceptors/http.interceptor';
+import { LoadingService } from './helpers/services/loader.service';
+import { LoadingInterceptor } from './interceptors/loader.interceptor';
+import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
+import { localStorageSync, rehydrateApplicationState } from 'ngrx-store-localstorage';
+
+// const reducerss: ActionReducerMap<AppState> = {auth}
+
+export function localStorageSyncReducer(reducerss: ActionReducer<any>): ActionReducer<any> {
+  return localStorageSync({keys: ['auth'],rehydrate: true})(reducerss);
+}
+const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,8 +60,8 @@ import { reducers } from './store/app.states';
     BrowserModule,
     AppRoutingModule,
     // StoreModule.forRoot(fromApp.appReducer),
-    StoreModule.forRoot({}),
-    StoreModule.forFeature('appState', reducers.auth),
+    StoreModule.forRoot(reducers,{metaReducers}),
+    StoreModule.forFeature('auth', reducers.auth),
     EffectsModule.forRoot([AuthenticateEffects]),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
@@ -72,15 +83,20 @@ import { reducers } from './store/app.states';
         deps: [HttpClient], // Dependencies which helps serving loader
       }
     }),
-   
+
     // EffectsModule.forRoot([]),
     // StoreModule.forFeature([reducers]),
-    EffectsModule.forFeature([AuthenticationEffect]),
+    // EffectsModule.forFeature([AuthenticationEffect]),
     StoreDevtoolsModule.instrument(),
-    
+    MatPasswordStrengthModule.forRoot()
 
   ],
-  providers: [StyleManagerService],
+  providers: [
+    StyleManagerService,
+    LoadingService,
+    { provide: HTTP_INTERCEPTORS, useClass: HttpResponseInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

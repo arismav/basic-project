@@ -6,8 +6,8 @@ import { DashboardService } from 'src/app/components/dashboard/dashboard.service
 import { deleteEntryAPISuccess, entriesFetchAPISuccess, invokeDeleteEntryAPI, invokeSaveNewEntryAPI, saveNewEntryAPISuccess, updateEntryAPI, updateEntryAPISuccess } from '../actions/entries.actions';
 import { selectEntries } from '../selectors/entries.selector';
 import { invokeEntriesAPI } from '../actions/entries.actions';
-import { Appstate } from '../appstate';
-import { setAPIStatus } from '../actions/app.actions';
+// import { Appstate } from '../appstate';
+// import { setAPIStatus } from '../actions/app.actions';
 
 @Injectable()
 export class EntriesEffect {
@@ -15,7 +15,7 @@ export class EntriesEffect {
         private actions$: Actions,
         private dashboardService: DashboardService,
         private store: Store,
-        private appStore: Store<Appstate>
+        // private appStore: Store<Appstate>
     ) { }
 
     loadAllEntries$ = createEffect(() => {

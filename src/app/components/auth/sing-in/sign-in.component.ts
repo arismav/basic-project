@@ -1,22 +1,24 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { ToastrService } from 'ngx-toastr';
-import { map, Subscription } from 'rxjs';
+import { map, Subscription, take } from 'rxjs';
 import { AuthUser } from 'src/app/models/auth-user.model';
 import { LogIn } from 'src/app/store/actions/authenticate.actions';
 import { authFetchAPISuccess, invokeAuthAPI } from 'src/app/store/actions/authentication.actions';
 import { AppState } from 'src/app/store/app.states';
 import { selectAppState } from 'src/app/store/selectors/app.selector';
-import { selectAuthUser } from 'src/app/store/selectors/authentication.selector';
+// import { selectAuthUser } from 'src/app/store/selectors/authentication.selector';
 import { ValidateLowercase } from '../../../helpers/validators/lowercase.validator';
 import { ValidateNumeric } from '../../../helpers/validators/numeric.validator';
 import { ValidateSpecialchar } from '../../../helpers/validators/specialchar.validator';
 import { ValidateUppercase } from '../../../helpers/validators/uppercase.validator';
 import { AuthService } from '../auth.service';
 import * as fromAuth from '../../../store/reducers/authenticate.reducer'
+import { LoadingService } from 'src/app/helpers/services/loader.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-sign-in',
@@ -25,14 +27,18 @@ import * as fromAuth from '../../../store/reducers/authenticate.reducer'
 })
 export class SignInComponent implements OnInit, OnDestroy {
 
+
+  @Input() login!: boolean;
   loginForm: FormGroup | any;
   isLoginMode: boolean = true;
   isLoading: boolean = false;
   subs: Subscription[] = [];
-
+  // isLoginForm: boolean = true;
+  hidePass: boolean = true;
+  hidePassConf: boolean = true;
   user: AuthUser = new AuthUser();
 
-  public authUser$ = this._store.pipe(select(selectAuthUser));
+  // public authUser$ = this._store.pipe(select(selectAuthUser));
 
   constructor(
     private _authService: AuthService,
@@ -40,124 +46,115 @@ export class SignInComponent implements OnInit, OnDestroy {
     private _toastr: ToastrService,
     private _router: Router,
     private _fb: FormBuilder,
-    private _store: Store<AppState>
+    private _store: Store<AppState>,
+    public _loadingService: LoadingService,
+    private _snackBar: MatSnackBar
   ) {
-    console.log('login 1')
-    this.initLoginForm();
+    console.log('login');
+    console.log(this.login);
+
     this.subs.push(
-      this._authService.getSwitchLoginMode().subscribe((loginMode) => {
-        this.onSwitchMode(loginMode);
-      }),
-      this._store.select(selectAppState).subscribe
-      ((state: any) => {
-        console.log(state);
-        if (state.errorMessage) {
-          this.isLoading = false;
-          var errorMessage = this._authService.handleError(state.errorMessage.code);
-          this._toastr.error(errorMessage);
-        }
-        // return user;
-      })
+      // this._authService.getSwitchLoginMode().subscribe((loginMode) => {
+      //   // this.isLoginForm = loginMode;
+      //   this.onSwitchMode(loginMode);
+      // }),
+      // this._store.select(selectAppState)
+      // .pipe(
+      //   take(1)
+      // )
+      // .subscribe
+      //   ((state: any) => {
+      //     if (state.error.errorCode) {
+      //       this.isLoading = false;
+      //       // var errorMessage = this._authService.handleError(state.errorMessage.code);
+      //       this._toastr.error(state.error.errorMessage, state.error.errorCode);
+      //     }
+      //   })
     )
-
-
-    
-
   }
 
   ngOnInit() {
-    console.log('login')
-
-
-
+    console.log(this.login);
+    this.initForm();
   }
 
-  initLoginForm = () => {
+  initForm = () => {
+    console.log('init form');
     this.loginForm = this._fb.group({
-      email: ['', [Validators.required, Validators.email, Validators.pattern(
-        '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,63}$',
-      ),]],
-      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(15), ValidateLowercase, ValidateUppercase, ValidateNumeric, ValidateSpecialchar]]
+      // email: ['', [Validators.required, Validators.email, Validators.pattern(
+      //   '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,63}$',
+      // ),]],
+      identifier: ['', [Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(15), ValidateLowercase, ValidateUppercase, ValidateNumeric, ValidateSpecialchar]],
+      // passwordconf: ['', [Validators.required]]
+      // password: ['', [Validators.required]]
     });
+    if (!this.login) {
+      console.log('add email');
+      this.loginForm.addControl('email', new FormControl('', [Validators.required, Validators.email, Validators.pattern(
+        '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,63}$',
+      ),]));
+      this.loginForm.addControl('passwordconf', new FormControl('', [Validators.required]))
+    }
+
   }
 
 
 
   onSubmit = () => {
+    console.log(this.loginForm);
     if (!this.loginForm.valid) {
+      return;
+    }
+
+    if (this.loginForm.get('password') !== this.loginForm.get('passwordconf')) {
+      this._snackBar.open('Password Confirmation is not matching', 'close');
       return;
     }
 
     this.isLoading = true;
 
+    const username = this.loginForm.value.identifier;
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
 
-    let authPromise: Promise<any>;
 
-    if (this.isLoginMode) {
+    if (this.login) {
       // authPromise = this._authService.login(email, password);
       // this._store.dispatch(invokeAuthAPI({ username: email, password: password }));
       console.log('here');
-      this._store.dispatch(new LogIn({ email, password }));
+      const payload = {
+        identifier: username,
+        password: password
+      }
+      this._store.dispatch(new LogIn(payload));
 
     } else {
-      authPromise = this._authService.signup(email, password);
+      // authPromise = this._authService.signup(email, password);
+      const payload = {
+        username: username,
+        email: email,
+        password: password
+      }
+      console.log(payload);
+      this._authService.signup(payload).subscribe((register) => {
+        console.log(register);
+        this.isLoading = false;
+      },
+        error => {
+          console.log(error);
+        })
     }
-
-    // this.authUser$.subscribe((user) => {
-    //   console.log(user);
-    //   if (user && user.email) {
-    //     this.isLoading = false;
-    //     this._router.navigate(['dashboard']);
-    //     // this._authService.handleAuthentication(
-    //     //   user.email,
-    //     //   user.uid,
-    //     //   user.refreshToken
-    //     // )
-    //   }else {
-    //     console.log(user);
-    //     this.isLoading = false;
-    //     // var errorMessage = this._authService.handleError(error.code);
-    //     // this._toastr.error(errorMessage);
-    //   }
-    // },
-    //   (error) => {
-    //     console.log(error);
-    //     this.isLoading = false;
-    //     var errorMessage = this._authService.handleError(error.code);
-    //     this._toastr.error(errorMessage);
-    //   })
-
-    // authPromise
-    //   .then((result) => {
-    //     console.log(result);
-    //     this._firebaseAuth.authState.subscribe((user) => {
-    //       console.log(user);
-    //       if (user && user.email) {
-    //         this.isLoading = false;
-    //         this._router.navigate(['dashboard']);
-    //         this._authService.handleAuthentication(
-    //           user.email,
-    //           user.uid,
-    //           user.refreshToken
-    //         )
-    //       }
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     this.isLoading = false;
-    //     var errorMessage = this._authService.handleError(error.code);
-    //     this._toastr.error(errorMessage);
-    //   });
     this.removeValidators(this.loginForm);
   }
 
   onSwitchMode = (loginMode: boolean) => {
     this.isLoginMode = loginMode;
-    this.loginForm.clear
+    this.loginForm.clear;
     this.removeValidators(this.loginForm);
+    // this.initForm();
+    console.log(this.isLoginMode);
+
   }
 
   public removeValidators(form: FormGroup) {
@@ -170,6 +167,7 @@ export class SignInComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
+    console.log('on destroy');
     this.subs.forEach((sub) => {
       sub.unsubscribe();
     })

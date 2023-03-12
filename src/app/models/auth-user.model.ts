@@ -1,6 +1,6 @@
 export class AuthUser {
-    id?: string;
+    id?: number;
     email?: string;
-    password?: string;
-    token?: string;
+    username?: string;
+    jwt?: string;
 }

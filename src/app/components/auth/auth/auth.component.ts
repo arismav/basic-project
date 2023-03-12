@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -11,8 +11,11 @@ export class AuthComponent implements OnInit {
   public isLogin: boolean = true;
 
   constructor(
-    private _authService: AuthService
-  ) { }
+    private _authService: AuthService,
+    private _changeDetection: ChangeDetectorRef
+  ) {
+    console.log('IS LOGIN', this.isLogin)
+   }
 
   ngOnInit(): void {
   }
@@ -20,14 +23,21 @@ export class AuthComponent implements OnInit {
   changeTab(e: any) {
     console.log(e.index);
     if (e.index === 1) {
+      console.log('register');
+      
       this.isLogin = false;
-      this._authService.setSwitchLoginMode(false)
+      // this._changeDetection.detectChanges();
+      // this._authService.setSwitchLoginMode(false)
+      
 
     }
 
     if (e.index === 0) {
+      console.log('login');
+      
       this.isLogin = true;
-      this._authService.setSwitchLoginMode(true)
+      // this._changeDetection.detectChanges();
+      // this._authService.setSwitchLoginMode(true)
 
     }
   }

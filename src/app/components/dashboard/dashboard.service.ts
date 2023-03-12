@@ -5,7 +5,7 @@ import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { IEntries, IEntry } from 'src/app/models/entry.model';
 import { StyleManagerService } from 'src/app/style-manager.service';
 import { IThemeOption, IThemeOptions } from '../../models/theme-option.model';
-import * as fromApp from '../../store/reducers/app.reducer';
+// import * as fromApp from '../../store/reducers/app.reducer';
 import * as DataTableActions from './../../store/actions/data-table.actions';
 
 @Injectable({

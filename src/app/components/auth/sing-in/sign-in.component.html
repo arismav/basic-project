@@ -3,6 +3,15 @@
     <div class="form-container">
       <div>
         <mat-form-field class="w-75">
+          <input matInput placeholder="Username" formControlName="identifier">
+          <mat-error
+            *ngIf="loginForm.get('identifier')?.invalid && (loginForm.get('identifier')?.dirty || loginForm.get('identifier')?.touched) && loginForm.get('identifier')?.errors?.required">
+            Username is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div *ngIf="!login">
+        <mat-form-field class="w-75">
           <input matInput placeholder="Email" formControlName="email">
           <mat-error *ngIf="!loginForm.get('email')?.errors?.required && (loginForm.get('email')?.errors?.pattern)">
             Please enter a valid email address
@@ -15,40 +24,68 @@
       </div>
       <div class="mt-top-2">
         <mat-form-field class="w-75">
-          <input matInput type="password" placeholder="Password" formControlName="password">
+          <input matInput [type]="hidePass ? 'password' : 'text'" placeholder="Password" formControlName="password">
+          <mat-icon matSuffix (click)="hidePass = !hidePass">{{hidePass ? 'visibility_off' : 'visibility'}}</mat-icon>
           <!-- <mat-error *ngIf="!loginForm.get('password')?.errors?.required">
             Password length must be greater than or equal to 8 and password must contain one or more uppercase ,
             lowercase , numeric and special characters
           </mat-error> -->
-          <mat-error *ngIf="!loginForm.get('password')?.errors?.required && loginForm.get('password')?.errors?.minlength">
+          <!-- <mat-error
+            *ngIf="!loginForm.get('password')?.errors?.required && loginForm.get('password')?.errors?.minlength">
             Password length must be greater than or equal to 8
           </mat-error>
-          <mat-error *ngIf="!loginForm.get('password')?.errors?.required && loginForm.get('password')?.errors?.maxlength">
+          <mat-error
+            *ngIf="!loginForm.get('password')?.errors?.required && loginForm.get('password')?.errors?.maxlength">
             Password length must be less than or equal to 10
           </mat-error>
-          <mat-error *ngIf="!loginForm.get('password')?.errors?.required && loginForm.get('password')?.errors?.validLowercase">
+          <mat-error
+            *ngIf="!loginForm.get('password')?.errors?.required && loginForm.get('password')?.errors?.validLowercase">
             Password must contain at lease one lowercase letter
           </mat-error>
-          <mat-error *ngIf="!loginForm.get('password')?.errors?.required && loginForm.get('password')?.errors?.validUppercase">
+          <mat-error
+            *ngIf="!loginForm.get('password')?.errors?.required && loginForm.get('password')?.errors?.validUppercase">
             Password must contain at lease one uppercase letter
           </mat-error>
-          <mat-error *ngIf="!loginForm.get('password')?.errors?.required && loginForm.get('password')?.errors?.validNumeric">
+          <mat-error
+            *ngIf="!loginForm.get('password')?.errors?.required && loginForm.get('password')?.errors?.validNumeric">
             Password must contain at lease one number
           </mat-error>
-          <mat-error *ngIf="!loginForm.get('password')?.errors?.required && loginForm.get('password')?.errors?.validSpecialchar">
+          <mat-error
+            *ngIf="!loginForm.get('password')?.errors?.required && loginForm.get('password')?.errors?.validSpecialchar">
             Password must contain at lease one special character
-          </mat-error>
+          </mat-error>-->
           <mat-error
             *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched) && loginForm.get('password')?.errors?.required">
             Password is required
-          </mat-error>
+          </mat-error> 
+
         </mat-form-field>
+        <div *ngIf="!login">
+          <mat-form-field class="w-75">
+            <input matInput [type]="hidePassConf ? 'password' : 'text'" placeholder="Password Confirmation" formControlName="passwordconf">
+            <mat-icon matSuffix (click)="hidePassConf = !hidePassConf">{{hidePassConf ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <mat-error
+              *ngIf="loginForm.get('passwordconf')?.invalid && (loginForm.get('passwordconf')?.dirty || loginForm.get('passwordconf')?.touched) && loginForm.get('passwordconf')?.errors?.required">
+              Password Confirmation is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <ng-container *ngIf="!login">
+          <h4 class="mt-2">Password Strength</h4>
+          <mat-password-strength #passwordComponent class="green d-block m-auto w-75 "
+            [password]="loginForm.get('password').value">
+
+          </mat-password-strength>
+          <mat-password-strength-info [passwordComponent]="passwordComponent">
+          </mat-password-strength-info>
+        </ng-container>
       </div>
-      <div class="submit-container d-flex flex-column align-items-center">
-        <button [disabled]="!loginForm.valid" mat-raised-button color="primary" mat-button>{{isLoginMode ? 'Sign In' :
-          'Sign Up'}}</button>
+      
+      <div class="submit-container d-flex flex-column align-items-center mt-2">
+        <button [disabled]="!loginForm.valid" mat-stroked-button color="primary" mat-button>{{login ? 'Sign In' :
+          'Register'}}</button>
       </div>
     </div>
   </form>
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <mat-spinner *ngIf="_loadingService.isLoading$ | async"></mat-spinner>
 </div>

@@ -4,6 +4,11 @@
 
 export const environment = {
   production: false,
+  api : {
+    mainUrl : 'https://exo-api.onrender.com/api',
+    auth : '/auth/local',
+    register: '/auth/local/register'
+  },
   firebase : {
     apiKey: "AIzaSyDw-N0r7_qEK4idD3pMLo79t3H-Gl93Xa8",
     authDomain: "app-mav-oct-22.firebaseapp.com",

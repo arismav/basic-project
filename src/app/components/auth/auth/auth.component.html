@@ -9,12 +9,12 @@
                 <mat-tab-group mat-align-tabs="center" (selectedTabChange)="changeTab($event)">
                     <mat-tab label="Login">
                         <ng-container *ngIf="isLogin">
-                            <app-sign-in></app-sign-in>
+                            <app-sign-in [login]="isLogin"></app-sign-in>
                         </ng-container>
                     </mat-tab>
                     <mat-tab label="Register">
                         <ng-container *ngIf="!isLogin">
-                            <app-sign-in></app-sign-in>
+                            <app-sign-in [login]="isLogin"></app-sign-in>
                         </ng-container>
                     </mat-tab>
                 </mat-tab-group>

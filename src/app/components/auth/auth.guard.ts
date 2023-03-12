@@ -13,7 +13,7 @@ import { AuthService } from './auth.service';
 // import * as fromApp from '../../store/reducers/app.reducer';
 import * as AuthActions from '../../store/actions/auth.actions';
 import { State, Store } from '@ngrx/store';
-import { AppState, selectAuthState } from 'src/app/store/app.states';
+import { AppState } from 'src/app/store/app.states';
 import { selectAppState } from 'src/app/store/selectors/app.selector';
 import * as fromAuth from '../../store/reducers/authenticate.reducer'
 
@@ -31,6 +31,14 @@ export class AuthGuard implements CanActivate {
         console.log(this.url);
         // const token = 
         const isAuth = (localStorage.getItem('token') !== null);
+        this._store.select(selectAppState).pipe(
+            take(1),
+            map(authState => {
+                console.log(authState);
+            })
+        ).subscribe((state)=>{
+            console.log(state);
+        })
         // return this._store.select(selectAppState).pipe(
         //     take<any>(1),
         // map(authState => {

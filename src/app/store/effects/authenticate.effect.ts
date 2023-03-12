@@ -4,10 +4,10 @@ import { Router } from '@angular/router';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 // import { Observable } from 'rxjs/Observable';
 
-import { map, tap, switchMap, take } from 'rxjs/operators';
+import { map, tap, switchMap, take, catchError } from 'rxjs/operators';
 import { AuthService } from 'src/app/components/auth/auth.service';
-import { Observable } from 'rxjs';
-import { AuthActionTypes, LogIn, LogInFailure, LogInSuccess, LogOut} from '../actions/authenticate.actions';
+import { Observable, of } from 'rxjs';
+import { AuthActionTypes, LogIn, LogInFailure, LogInSuccess, LogOut } from '../actions/authenticate.actions';
 import { AppState } from '../app.states';
 import * as fromAuth from '../reducers/authenticate.reducer'
 
@@ -28,23 +28,30 @@ export class AuthenticateEffects {
 
     @Effect()
     LogIn: Observable<any> = this.actions.pipe(
-        ofType(AuthActionTypes.LOGIN),
+        ofType<LogIn>(AuthActionTypes.LOGIN),
         // take(1),
         map((action: LogIn) => action.payload),
 
-        switchMap((payload: any) => {
+        switchMap(payload => {
             console.log(payload);
-            return this.authService.login(payload.email, payload.password)
-                .then((user) => {
-                    console.log(user);
-                    // this._store.dispatch(new LogInSuccess({ token: user.user?.refreshToken, email: payload.email }));
-                    return new LogInSuccess({ token: user.user?.refreshToken, email: payload.email });
-                })
-                .catch((error) => {
-                    console.log(error);
-                    return new LogInFailure({ error: error });
-                });
+            return this.authService.login(payload.identifier, payload.password)
+                .pipe(
+                    map((auth: any) => {
+                        console.log(auth);
+                        // this._store.dispatch(new LogInSuccess({ token: user.user?.refreshToken, email: payload.email }));
+                        return new LogInSuccess(auth);
+                    }
+                    ),
+                    catchError((error:any) => {
+                        console.log(error)
+                       // return new LogInFailure(error);
+                        this._store.dispatch(new LogInFailure(error.error));
+                        return of(error);
+                    })
+
+                )
         })
+
     );
 
     @Effect({ dispatch: false })
@@ -52,8 +59,8 @@ export class AuthenticateEffects {
         ofType(AuthActionTypes.LOGIN_SUCCESS),
         tap((user: any) => {
             console.log(user);
-            if (user.payload.token) {
-                localStorage.setItem('token', user.payload.token);
+            if (user.payload.jwt) {
+                localStorage.setItem('token', user.payload.jwt);
             }
             this.router.navigateByUrl('/dashboard');
         })
@@ -69,6 +76,7 @@ export class AuthenticateEffects {
         ofType(AuthActionTypes.LOGOUT),
         tap((user) => {
             localStorage.removeItem('token');
+            localStorage.removeItem('auth');
         })
     );
 

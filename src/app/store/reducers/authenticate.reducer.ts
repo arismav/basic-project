@@ -2,40 +2,54 @@ import { AuthUser } from "src/app/models/auth-user.model";
 import { All, AuthActionTypes } from "../actions/authenticate.actions";
 
 export interface State {
-    // is a user authenticated?
     isAuthenticated: boolean;
-    // if authenticated, there should be a user object
     user: AuthUser | null;
-    // error message
-    errorMessage: any | null;
+    error: {
+        errorMessage: string | null;
+        errorCode: string | null;
+    }
 }
 
 export const initialState: State = {
     isAuthenticated: false,
     user: null,
-    errorMessage: null
+    error : {
+        errorMessage: null,
+        errorCode: ''
+    }
 };
 
 export function reducer(state = initialState, action: All): State {
     switch (action.type) {
         case AuthActionTypes.LOGIN_SUCCESS: {
             console.log('Auth Reducer Here')
+            console.log(action);
             const newState = {
                 ...state,
                 isAuthenticated: true,
                 user: {
-                    token: action.payload.token,
-                    email: action.payload.email
+                    id: action.payload.user.id,
+                    email: action.payload.user.email,
+                    username: action.payload.user.username,
+                    jwt: action.payload.jwt
                 },
-                errorMessage: null
+                error: {
+                    errorMessage: null,
+                    errorCode: null
+                }
             }
             console.log(newState);
+            localStorage.setItem('auth', JSON.stringify(newState));
             return newState;
         }
         case AuthActionTypes.LOGIN_FAILURE: {
+            console.log(action.payload);
             return {
                 ...state,
-                errorMessage: action.payload.error
+                error : {
+                    errorMessage: action.payload.error.message,
+                    errorCode: action.payload.error.status
+                }
             };
         }
         case AuthActionTypes.LOGOUT: {

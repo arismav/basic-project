@@ -1,6 +1,6 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
-import * as fromApp from '../../../store/reducers/app.reducer';
+// import * as fromApp from '../../../store/reducers/app.reducer';
 import { Store } from '@ngrx/store';
 import { User } from '../../../models/user.model';
 import { Observable } from 'rxjs';

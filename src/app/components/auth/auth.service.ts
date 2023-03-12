@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, Subject, tap, throwError } from 'rxjs';
 import { LogOut } from 'src/app/store/actions/authenticate.actions';
 import { AppState } from 'src/app/store/app.states';
+import { environment } from 'src/environments/environment';
 import { User } from '../../models/user.model';
 
 // import * as fromApp from '../../store/reducers/app.reducer';
@@ -16,9 +17,13 @@ import * as AuthActions from '../../store/actions/auth.actions';
 })
 export class AuthService {
 
+  public mainUrl = environment.api.mainUrl;
+  public auth = environment.api.auth;
+  public register = environment.api.register;
+
   public userData: any;
   //public user = new BehaviorSubject<User | null>(null);
-  public switchLoginMode$ = new BehaviorSubject<boolean>(true);
+  public switchLoginMode$ = new Subject<boolean>();
 
   constructor(
     private _http: HttpClient,
@@ -29,13 +34,15 @@ export class AuthService {
 
   }
 
-  login(email: string, password: string) {
-    return this._firebaseAuth.signInWithEmailAndPassword(email, password);
+  login(identifier: string, password: string) {
+    // return this._firebaseAuth.signInWithEmailAndPassword(email, password);
+    return this._http.post(`${this.mainUrl + this.auth}`, {identifier, password});
   }
 
 
-  signup = (email: string, password: string) => {
-    return this._firebaseAuth.createUserWithEmailAndPassword(email, password);
+  signup = (payload :{username: string, email: string, password: string}) => {
+    // return this._firebaseAuth.createUserWithEmailAndPassword(email, password);
+    return this._http.post(`${this.mainUrl + this.register}`, payload)
   }
 
   logout() {

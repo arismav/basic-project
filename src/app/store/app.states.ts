@@ -3,11 +3,11 @@ import * as auth from './reducers/authenticate.reducer';
 
 
 export interface AppState {
-  authState: auth.State;
+  auth: auth.State;
 }
 
 export const reducers = {
   auth: auth.reducer
 };
 
-export const selectAuthState = createFeatureSelector<AppState>('auth');
+// export const selectAuthState = createFeatureSelector<AppState>('auth');

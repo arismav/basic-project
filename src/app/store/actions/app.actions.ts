@@ -1,8 +1,8 @@
-import { createAction, props } from "@ngrx/store";
-import { Appstate } from "../appstate";
+// import { createAction, props } from "@ngrx/store";
+// import { Appstate } from "../appstate";
 
  
-export const setAPIStatus = createAction(
-    '[API] success or failure status',
-    props<{apiStatus: Appstate}>()
-);
+// export const setAPIStatus = createAction(
+//     '[API] success or failure status',
+//     props<{apiStatus: Appstate}>()
+// );
