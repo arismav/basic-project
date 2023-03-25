@@ -1,0 +1,51 @@
+.mat-progress-spinner {
+    top: 50%;
+    left: calc(50% - 50px);
+    position: absolute !important;
+}
+
+.mat-icon:hover {
+    cursor: pointer !important;
+}
+
+.mat-menu-panel {
+    min-width: 50px !important;
+}
+
+.main-container {
+    flex: 1 1 auto;
+}
+
+.active {
+    background-color: #ccc;
+}
+
+.darkMode {
+
+    .active,
+    .activebutton,
+    .table-header {
+        background-color: #7d6363 !important;
+
+    }
+}
+
+.example-spacer {
+    flex: 1 1 auto !important;
+}
+
+.mat-menu-content:not(:empty) {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.mat-card-header-text {
+    max-width: 200px !important;
+    width: 200px;
+}
+
+.mat-card-title {
+    text-overflow: ellipsis !important;
+    overflow-x: hidden !important;
+    line-height: 25px !important;
+}

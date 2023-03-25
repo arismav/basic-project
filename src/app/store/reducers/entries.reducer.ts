@@ -1,6 +1,11 @@
 import { createReducer, on } from "@ngrx/store";
 import { IEntry } from "src/app/models/entry.model";
-import { deleteEntryAPISuccess, entriesFetchAPISuccess, saveNewEntryAPISuccess, updateEntryAPISuccess } from "../actions/entries.actions";
+import { deleteEntryAPISuccess, entriesFetchAPISuccess, restoreEntries, saveNewEntryAPISuccess, updateEntryAPISuccess } from "../actions/entries.actions";
+
+
+export interface State {
+    myentries : IEntry[]
+}
 
 export const initialState: ReadonlyArray<IEntry> = [];
 
@@ -28,5 +33,8 @@ export const entriesReducer = createReducer(
         //     return entry.id !== deleteEntryId
         // })
         return newState;
+    }),
+    on(restoreEntries,(state,{}) => {
+        return initialState;
     })
 );

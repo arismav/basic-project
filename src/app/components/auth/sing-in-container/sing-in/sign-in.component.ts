@@ -7,16 +7,15 @@ import { ToastrService } from 'ngx-toastr';
 import { map, Subscription, take } from 'rxjs';
 import { AuthUser } from 'src/app/models/auth-user.model';
 import { LogIn } from 'src/app/store/actions/authenticate.actions';
-import { authFetchAPISuccess, invokeAuthAPI } from 'src/app/store/actions/authentication.actions';
 import { AppState } from 'src/app/store/app.states';
 import { selectAppState } from 'src/app/store/selectors/app.selector';
 // import { selectAuthUser } from 'src/app/store/selectors/authentication.selector';
-import { ValidateLowercase } from '../../../helpers/validators/lowercase.validator';
-import { ValidateNumeric } from '../../../helpers/validators/numeric.validator';
-import { ValidateSpecialchar } from '../../../helpers/validators/specialchar.validator';
-import { ValidateUppercase } from '../../../helpers/validators/uppercase.validator';
-import { AuthService } from '../auth.service';
-import * as fromAuth from '../../../store/reducers/authenticate.reducer'
+import { ValidateLowercase } from '../../../../helpers/validators/lowercase.validator';
+import { ValidateNumeric } from '../../../../helpers/validators/numeric.validator';
+import { ValidateSpecialchar } from '../../../../helpers/validators/specialchar.validator';
+import { ValidateUppercase } from '../../../../helpers/validators/uppercase.validator';
+import { AuthService } from '../../auth.service';
+import * as fromAuth from '../../../../store/reducers/authenticate.reducer'
 import { LoadingService } from 'src/app/helpers/services/loader.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -107,7 +106,8 @@ export class SignInComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.loginForm.get('password') !== this.loginForm.get('passwordconf')) {
+    
+    if (!this.login && this.loginForm.get('password') !== this.loginForm.get('passwordconf')) {
       this._snackBar.open('Password Confirmation is not matching', 'close');
       return;
     }
@@ -165,6 +165,9 @@ export class SignInComponent implements OnInit, OnDestroy {
     });
   }
 
+  forgotPassword() {
+    this._router.navigate(['auth/forgot-password'],);
+  }
 
   ngOnDestroy() {
     console.log('on destroy');

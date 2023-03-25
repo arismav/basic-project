@@ -1,4 +1,4 @@
-import { createAction, props } from '@ngrx/store';
+import { Action, createAction, props } from '@ngrx/store';
 import { IEntry } from 'src/app/models/entry.model';
 
 export const invokeEntriesAPI = createAction(
@@ -40,3 +40,12 @@ export const updateEntryAPISuccess = createAction(
     '[Update API] Update api success',
     props<{ updateEntryId: number, updatedEntry: IEntry }>()
 );
+
+export const restoreEntries = createAction(
+    '[Restore Entries] Restore entries success',
+    // props<{ allEntries: IEntry[] }>()
+);
+
+// export class restoreEntries implements Action {
+//     readonly type = 'restoreEntries';
+// }

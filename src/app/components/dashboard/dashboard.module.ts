@@ -17,6 +17,7 @@ import { StoreModule } from '@ngrx/store';
 import { entriesReducer } from 'src/app/store/reducers/entries.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { EntriesEffect } from 'src/app/store/effects/entries.effect';
+import { reducers } from 'src/app/store/app.states';
 
 
 @NgModule({
@@ -37,7 +38,7 @@ import { EntriesEffect } from 'src/app/store/effects/entries.effect';
     TranslateModule,
     FormsModule,
     ReactiveFormsModule,
-    StoreModule.forFeature('myentries', entriesReducer),
+    StoreModule.forFeature('myentries', reducers.myentries),
     EffectsModule.forFeature([EntriesEffect])
   ],
   providers: [],

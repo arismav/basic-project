@@ -5,12 +5,13 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, catchError, Observable, Subject, tap, throwError } from 'rxjs';
 import { LogOut } from 'src/app/store/actions/authenticate.actions';
+import { restoreEntries } from 'src/app/store/actions/entries.actions';
 import { AppState } from 'src/app/store/app.states';
 import { environment } from 'src/environments/environment';
 import { User } from '../../models/user.model';
+import * as entriesActions from '../../store/actions/entries.actions'
 
 // import * as fromApp from '../../store/reducers/app.reducer';
-import * as AuthActions from '../../store/actions/auth.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,7 @@ export class AuthService {
   public mainUrl = environment.api.mainUrl;
   public auth = environment.api.auth;
   public register = environment.api.register;
+  public forgotPass = environment.api.forgotPass;
 
   public userData: any;
   //public user = new BehaviorSubject<User | null>(null);
@@ -35,24 +37,25 @@ export class AuthService {
   }
 
   login(identifier: string, password: string) {
-    // return this._firebaseAuth.signInWithEmailAndPassword(email, password);
-    return this._http.post(`${this.mainUrl + this.auth}`, {identifier, password});
+    return this._http.post(`${this.mainUrl + this.auth}`, { identifier, password });
   }
 
 
-  signup = (payload :{username: string, email: string, password: string}) => {
-    // return this._firebaseAuth.createUserWithEmailAndPassword(email, password);
+  signup = (payload: { username: string, email: string, password: string }) => {
     return this._http.post(`${this.mainUrl + this.register}`, payload)
   }
 
   logout() {
     return this._firebaseAuth.signOut().then(() => {
       localStorage.removeItem('user');
-      //this.user.next(null);
-      // this.store.dispatch(new AuthActions.Logout())
       this._store.dispatch(new LogOut);
+      this._store.dispatch(restoreEntries());
       this._router.navigate(['/auth']);
     });
+  }
+
+  forgotPassword(payload: { email: string }) {
+    return this._http.post(`${this.mainUrl + this.forgotPass}`, payload)
   }
 
   setSwitchLoginMode(flag: boolean) {

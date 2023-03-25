@@ -7,7 +7,8 @@ export const environment = {
   api : {
     mainUrl : 'https://exo-api.onrender.com/api',
     auth : '/auth/local',
-    register: '/auth/local/register'
+    register: '/auth/local/register',
+    forgotPass: '/auth/forgot-password'
   },
   firebase : {
     apiKey: "AIzaSyDw-N0r7_qEK4idD3pMLo79t3H-Gl93Xa8",

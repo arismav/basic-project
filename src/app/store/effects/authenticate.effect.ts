@@ -43,8 +43,7 @@ export class AuthenticateEffects {
                     }
                     ),
                     catchError((error:any) => {
-                        console.log(error)
-                       // return new LogInFailure(error);
+                        console.log(error);
                         this._store.dispatch(new LogInFailure(error.error));
                         return of(error);
                     })

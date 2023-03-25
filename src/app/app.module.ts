@@ -13,7 +13,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { SignInComponent } from './components/auth/sing-in/sign-in.component';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { DashboardMainComponent } from './components/dashboard/dashboard-main/dashboard-main.component';
@@ -21,7 +20,6 @@ import { HeaderComponent } from './components/dashboard/header/header.component'
 import { MaterialModule } from './material.module';
 import { AuthComponent } from './components/auth/auth/auth.component';
 import { ActionReducer, ActionReducerMap, MetaReducer, State, StoreModule } from '@ngrx/store';
-// import * as fromApp from './store/reducers/app.reducer';
 import * as fromApp from './store/reducers/authenticate.reducer'
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { customTranslate } from './helpers/translate/customTranslate.loader';
@@ -29,10 +27,7 @@ import { NotFoundComponent } from './components/shared/not-found/not-found.compo
 import { StyleManagerService } from './style-manager.service';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-// import { appReducer } from './store/reducers/app.reducer';
 import { DialogComponent } from './components/shared/dialog/dialog.component';
-// import { authenticationReducer } from './store/reducers/authentication.reducer';
-// import { AuthenticationEffect } from './store/effects/authentication.effect';
 import { AuthenticateEffects } from './store/effects/authenticate.effect';
 import { AppState, reducers } from './store/app.states';
 import { HttpResponseInterceptor } from './interceptors/http.interceptor';
@@ -40,11 +35,14 @@ import { LoadingService } from './helpers/services/loader.service';
 import { LoadingInterceptor } from './interceptors/loader.interceptor';
 import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
 import { localStorageSync, rehydrateApplicationState } from 'ngrx-store-localstorage';
+import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
+import { SingInContainerComponent } from './components/auth/sing-in-container/sing-in-container.component';
+import { SignInComponent } from './components/auth/sing-in-container/sing-in/sign-in.component';
 
 // const reducerss: ActionReducerMap<AppState> = {auth}
 
 export function localStorageSyncReducer(reducerss: ActionReducer<any>): ActionReducer<any> {
-  return localStorageSync({keys: ['auth'],rehydrate: true})(reducerss);
+  return localStorageSync({keys: ['auth', 'appconfigs'],rehydrate: true})(reducerss);
 }
 const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 @NgModule({
@@ -54,14 +52,16 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     SignInComponent,
     LoadingSpinnerComponent,
     NotFoundComponent,
-    DialogComponent
+    DialogComponent,
+    ForgotPasswordComponent,
+    SingInContainerComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    // StoreModule.forRoot(fromApp.appReducer),
     StoreModule.forRoot(reducers,{metaReducers}),
     StoreModule.forFeature('auth', reducers.auth),
+    StoreModule.forFeature('appconfigs', reducers.appconfigs),
     EffectsModule.forRoot([AuthenticateEffects]),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,

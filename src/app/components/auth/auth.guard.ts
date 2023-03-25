@@ -11,7 +11,6 @@ import { map, tap, take } from 'rxjs/operators';
 
 import { AuthService } from './auth.service';
 // import * as fromApp from '../../store/reducers/app.reducer';
-import * as AuthActions from '../../store/actions/auth.actions';
 import { State, Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.states';
 import { selectAppState } from 'src/app/store/selectors/app.selector';
@@ -30,14 +29,28 @@ export class AuthGuard implements CanActivate {
         this.url = state.url;
         console.log(this.url);
         // const token = 
-        const isAuth = (localStorage.getItem('token') !== null);
+        // const isAuth = (localStorage.getItem('token') !== null);
         this._store.select(selectAppState).pipe(
             take(1),
             map(authState => {
                 console.log(authState);
+                return authState;
             })
-        ).subscribe((state)=>{
+        ).subscribe((state) => {
             console.log(state);
+            const isAuth = state.isAuthenticated;
+            if (isAuth) {
+                if (this.url === '/auth') {
+                    console.log('here');
+                    return this.onLoginPageLogged();
+                }
+                return this.onOtherPageLogged();
+            } else {
+                if (this.url === '/auth') {
+                    return true;
+                }
+                return this.onOtherPageLoggedOut();
+            }
         })
         // return this._store.select(selectAppState).pipe(
         //     take<any>(1),
@@ -48,18 +61,7 @@ export class AuthGuard implements CanActivate {
         // map((user:fromAuth.State) => {
         // console.log(user);
         // const isAuth = user.isAuthenticated;
-        if (isAuth) {
-            if (this.url === '/auth') {
-                console.log('here');
-                return this.onLoginPageLogged();
-            }
-            return this.onOtherPageLogged();
-        } else {
-            if (this.url === '/auth') {
-                return true;
-            }
-            return this.onOtherPageLoggedOut();
-        }
+
 
         // })
         // );
