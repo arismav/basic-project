@@ -12,7 +12,7 @@ import { FormControl } from '@angular/forms';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { selectAppConfigsState, selectAppState } from 'src/app/store/selectors/app.selector';
 import { AppState } from 'src/app/store/app.states';
-import { DarkMode } from 'src/app/store/actions/app-configs.actions';
+import { DarkMode, Language } from 'src/app/store/actions/app-configs.actions';
 
 @Component({
   selector: 'app-header',
@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit {
   public darkMode: boolean = false;
 
   langs: any = { 'el': 'Greek', 'en': 'English' };
-  currentLang: string = 'en';
+  currentLang: string | null = null;
 
 
   constructor(
@@ -43,7 +43,6 @@ export class HeaderComponent implements OnInit {
 
 
     this._translateService.addLangs(Object.keys(this.langs));
-    this._translateService.setDefaultLang('en');
   }
 
   ngOnInit(): void {
@@ -55,6 +54,11 @@ export class HeaderComponent implements OnInit {
         console.log(appConfigs);
         if (appConfigs.darkMode) {
           this.toggleDarkMode(null, true);
+        }
+        if (appConfigs.language) {
+          this.currentLang = appConfigs.language;
+          this._translateService.setDefaultLang(this.currentLang);
+
         }
       })
 
@@ -76,11 +80,12 @@ export class HeaderComponent implements OnInit {
   switchLang(e: any) {
     this._translateService.use(e.target.value);
     this.currentLang = e.target.value;
+    this._store.dispatch(new Language(this.currentLang));
   }
 
   toggleDarkMode(e?: any, check?: boolean) {
     console.log('here1');
-    this.darkMode =! this.darkMode;
+    this.darkMode = !this.darkMode;
     const darkClassName = 'darkMode';
     this.className = (e?.checked || check) ? darkClassName : '';
     if ((e?.checked) || check) {

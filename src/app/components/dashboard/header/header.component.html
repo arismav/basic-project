@@ -17,7 +17,7 @@
     <mat-menu #lang="matMenu">
         <ng-container *ngFor="let lang of langs | keyvalue">
             <button mat-menu-item (click)="switchLang($event)"
-                [ngClass]=" lang.key === currentLang ? 'activebutton' : ''" [value]="lang.key">
+                [ngClass]=" lang.key === currentLang ? 'active' : ''" [value]="lang.key">
                 {{lang.key}}
             </button>
         </ng-container>
