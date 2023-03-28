@@ -18,6 +18,7 @@ import { entriesReducer } from 'src/app/store/reducers/entries.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { EntriesEffect } from 'src/app/store/effects/entries.effect';
 import { reducers } from 'src/app/store/app.states';
+import { ProfileComponent } from './profile/profile.component';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { reducers } from 'src/app/store/app.states';
     SidenavComponent,
     DataTableComponent,
     DataTableViewComponent,
+    ProfileComponent,
     DataTableContainerComponent,
     FilterdataPipe
   ],

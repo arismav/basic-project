@@ -1,3 +1,4 @@
+import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -16,6 +17,10 @@ export class DashboardService {
   private tableDataUrl = 'https://api.publicapis.org/entries'
 
   private tableDataStore = new BehaviorSubject(null);
+
+  private _componentPortal$ = new BehaviorSubject<ComponentPortal<any> | null>(
+    null
+  );
 
   constructor(
     private _http: HttpClient,
@@ -72,6 +77,13 @@ export class DashboardService {
 
   getTableDataStore() {
     return this.tableDataStore;
+  }
+
+  getComponentPortal$(): Observable<ComponentPortal<any> | null> {
+    return this._componentPortal$.asObservable();
+  }
+  setComponentPortal(component: ComponentType<any>) {
+    this._componentPortal$.next(new ComponentPortal<any>(component));
   }
 
 

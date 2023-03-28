@@ -3,7 +3,8 @@
         "header": {
             "title" : "Mav's app",
             "profile": {
-                "logout" : "Logout"
+                "logout" : "Logout",
+                "profile": "Profile"
             }
         },
         "sidenav" : {

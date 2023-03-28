@@ -10,7 +10,20 @@
             <mat-drawer #drawer class="drawer-sidenav p-3" mode="side" drawer>
                 <app-sidenav></app-sidenav>
             </mat-drawer>
+            <mat-drawer #rightSideNav class="drawer-sidenav p-3" mode="over" position="end">
+                <div class="container">
+                    <ng-template [cdkPortalOutlet]="_rightSideComponent$ | async"></ng-template>
+                </div>
+            </mat-drawer>
+            <!-- <mat-sidenav-container class="example-container">
+                <mat-sidenav #rightSideNav="matSidenav" mode="over" position="end">
+                    <div class="container">
+                        <ng-template [cdkPortalOutlet]="_rightSideComponent$ | async"></ng-template>
+                    </div>
+                </mat-sidenav>
+            </mat-sidenav-container> -->
             <router-outlet></router-outlet>
+
         </mat-drawer-container>
     </div>
 </div>

@@ -13,6 +13,8 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { selectAppConfigsState, selectAppState } from 'src/app/store/selectors/app.selector';
 import { AppState } from 'src/app/store/app.states';
 import { DarkMode, Language } from 'src/app/store/actions/app-configs.actions';
+import { ProfileComponent } from '../profile/profile.component';
+
 
 @Component({
   selector: 'app-header',
@@ -96,5 +98,10 @@ export class HeaderComponent implements OnInit {
       this._store.dispatch(new DarkMode(false));
       document.getElementsByTagName('app-header')[0].parentElement?.classList.remove(darkClassName);
     }
+  }
+
+
+  profileSidenav() {
+    this._dashboardService.setComponentPortal(ProfileComponent)
   }
 }

@@ -3,7 +3,8 @@
         "header": {
             "title": "Εφαρμογή",
             "profile": {
-                "logout": "Αποσύνδεση"
+                "logout": "Αποσύνδεση",
+                "profile": "Προφίλ"
             }
         },
         "sidenav": {
