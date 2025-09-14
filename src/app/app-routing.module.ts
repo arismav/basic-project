@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './components/auth/auth.guard';
+import { AuthGuard } from './guards/auth.guard';
 import { AuthComponent } from './components/auth/auth/auth.component';
 import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
 import { SingInContainerComponent } from './components/auth/sing-in-container/sing-in-container.component';
@@ -14,11 +14,17 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: SingInContainerComponent
+        component: SingInContainerComponent,
+        data: {
+          title: 'Login/Register'
+        }
       },
       {
         path: 'forgot-password',
-        component: ForgotPasswordComponent
+        component: ForgotPasswordComponent,
+        data: {
+          title: 'Forgot Password'
+        }
       }
     ]
   },
@@ -27,7 +33,9 @@ const routes: Routes = [
     loadChildren: () => import('./components/dashboard/dashboard.module').then(m => m.DashboardModule),
     canActivate: [AuthGuard]
   },
-  { path: '**', component: NotFoundComponent }
+  { path: '**', component: NotFoundComponent, data: {
+    title: 'Not Found'
+  } }
 ];
 
 @NgModule({

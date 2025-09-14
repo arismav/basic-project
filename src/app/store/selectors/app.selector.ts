@@ -3,3 +3,4 @@ import { AppState } from '../app.states';
  
 export const selectAppState = createFeatureSelector<AppState["auth"]>('auth');
 export const selectAppConfigsState = createFeatureSelector<AppState["appconfigs"]>('appconfigs');
+export const selectAppStateRoles = createFeatureSelector<AppState["auth"]["user"]>('auth');

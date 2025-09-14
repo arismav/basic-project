@@ -1,7 +1,13 @@
-<div class="menu-container d-flex align-items-center justify-content-center flex-column">
-    <ng-container *ngFor="let menuItem of menu">
-        <button mat-button class="w-100" routerLink="{{menuItem.routerLink}}" routerLinkActive="active">
-            {{menuItem.label | translate}}
-        </button>
-    </ng-container>
+<div class="logo-container d-flex align-items-center">
+    <img class="header-logo img h-100" src="/assets/apple.png">
+    <div class="header-brand">Apple</div>
+</div>
+<div class="menu-container d-flex align-items-stretch justify-content-start flex-column">
+    <app-menu-item  *ngFor="let menuItem of menu" [menuItem]="menuItem" ></app-menu-item>
+    <!-- <ng-container> -->
+        <!-- <button mat-button *roles="menuItem.role" class="w-100 px-2 d-flex justify-content-start" (click)="routeHandler(menuItem.routerLink)" routerLinkActive="active">
+            <mat-icon class="p-0 mr-5">{{menuItem.icon}}</mat-icon> 
+            <span class="menu-txt">{{menuItem.label | translate}}</span>
+        </button> -->
+    <!-- </ng-container> -->
 </div>

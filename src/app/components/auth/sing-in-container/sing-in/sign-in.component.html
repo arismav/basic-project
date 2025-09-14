@@ -3,10 +3,15 @@
     <div class="form-container">
       <div>
         <mat-form-field class="w-75">
-          <input matInput placeholder="Username" formControlName="identifier">
-          <mat-error
-            *ngIf="loginForm.get('identifier')?.invalid && (loginForm.get('identifier')?.dirty || loginForm.get('identifier')?.touched) && loginForm.get('identifier')?.errors?.required">
+          <input matInput (input)="userNameChange()" placeholder="Username" formControlName="identifier">
+          <mat-error *ngIf="getRequiredValidator('identifier')">
             Username is required
+          </mat-error>
+          <mat-error *ngIf="username?.errors?.minlength">
+            Username must be at least 3 chars
+          </mat-error>
+          <mat-error *ngIf="username?.errors?.maxlength">
+            Username cannot be more than 10 chars
           </mat-error>
         </mat-form-field>
       </div>
@@ -16,8 +21,7 @@
           <mat-error *ngIf="!loginForm.get('email')?.errors?.required && (loginForm.get('email')?.errors?.pattern)">
             Please enter a valid email address
           </mat-error>
-          <mat-error
-            *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched) && loginForm.get('email')?.errors?.required">
+          <mat-error *ngIf="getRequiredValidator('email')">
             Email is required
           </mat-error>
         </mat-form-field>
@@ -26,6 +30,7 @@
         <mat-form-field class="w-75">
           <input matInput [type]="hidePass ? 'password' : 'text'" placeholder="Password" formControlName="password">
           <mat-icon matSuffix (click)="hidePass = !hidePass">{{hidePass ? 'visibility_off' : 'visibility'}}</mat-icon>
+
           <!-- <mat-error *ngIf="!loginForm.get('password')?.errors?.required">
             Password length must be greater than or equal to 8 and password must contain one or more uppercase ,
             lowercase , numeric and special characters
@@ -53,19 +58,28 @@
           <mat-error
             *ngIf="!loginForm.get('password')?.errors?.required && loginForm.get('password')?.errors?.validSpecialchar">
             Password must contain at lease one special character
-          </mat-error>-->
-          <mat-error
-            *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched) && loginForm.get('password')?.errors?.required">
+          </mat-error>
+          <mat-error *ngIf="getRequiredValidator('password')">
             Password is required
-          </mat-error> 
+          </mat-error> -->
 
         </mat-form-field>
+        <ng-container *ngIf="login">
+
+          <mat-password-strength #passwordComponent class="green d-block m-auto w-75 "
+            [password]="loginForm.get('password').value">
+
+          </mat-password-strength>
+          <mat-password-strength-info [passwordComponent]="passwordComponent">
+          </mat-password-strength-info>
+        </ng-container>
         <div *ngIf="!login">
           <mat-form-field class="w-75">
-            <input matInput [type]="hidePassConf ? 'password' : 'text'" placeholder="Password Confirmation" formControlName="passwordconf">
-            <mat-icon matSuffix (click)="hidePassConf = !hidePassConf">{{hidePassConf ? 'visibility_off' : 'visibility'}}</mat-icon>
-            <mat-error
-              *ngIf="loginForm.get('passwordconf')?.invalid && (loginForm.get('passwordconf')?.dirty || loginForm.get('passwordconf')?.touched) && loginForm.get('passwordconf')?.errors?.required">
+            <input matInput [type]="hidePassConf ? 'password' : 'text'" placeholder="Password Confirmation"
+              formControlName="passwordconf">
+            <mat-icon matSuffix (click)="hidePassConf = !hidePassConf">{{hidePassConf ? 'visibility_off' :
+              'visibility'}}</mat-icon>
+            <mat-error *ngIf="getRequiredValidator('passwordconf')">
               Password Confirmation is required
             </mat-error>
           </mat-form-field>
@@ -84,8 +98,12 @@
         <a mat-button color="primary" (click)="forgotPassword()">Forgot Password</a>
       </ng-container>
       <div class="submit-container d-flex flex-column align-items-center mt-2">
-        <button [disabled]="!loginForm.valid" mat-stroked-button color="primary" mat-button>{{login ? 'Sign In' :
+        <button class="mb-3" [disabled]="!loginForm.valid" mat-stroked-button color="primary" mat-button>{{login ? 'Sign
+          In' :
           'Register'}}</button>
+        <button type="button" mat-button mat-stroked-button (click)="loginWithGoogle()">
+          {{'Sign Up With Google'}}
+        </button>
       </div>
     </div>
   </form>

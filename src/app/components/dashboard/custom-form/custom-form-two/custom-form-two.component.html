@@ -1,0 +1,16 @@
+<div class="form-container">
+    <form [formGroup]="userJobForm" (ngSubmit)="onSubmit()">
+        <mat-form-field class="w-75">
+            <input matInput placeholder="User Job" formControlName="job">
+            <mat-error *ngIf="getRequiredValidator('job')">
+                Job is required
+            </mat-error>
+            <mat-error *ngIf="job?.errors?.minlength">
+                Job must be at least 3 chars
+            </mat-error>
+            <mat-error *ngIf="job?.errors?.maxlength">
+                Job cannot be more than 10 chars
+            </mat-error>
+        </mat-form-field>
+    </form>
+</div>

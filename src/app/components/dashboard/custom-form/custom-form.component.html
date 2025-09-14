@@ -1,0 +1,89 @@
+<div class="custom-form-container p-5">
+    <ng-container *ngIf="loaded1=== true && loaded2 === true">
+        <mat-horizontal-stepper [linear]="true" #stepper>
+            <!-- Step 1 -->
+            <mat-step [stepControl]="formOne">
+                <!-- <form> -->
+                    <ng-template matStepLabel>Step 1: Basic Info</ng-template>
+                    <app-custom-form-one ></app-custom-form-one>
+
+                    <div class="custom-form-actions mt-4">
+                        <button mat-button matStepperNext [disabled]="formOne.invalid">Next</button>
+                    </div>
+                <!-- </form> -->
+            </mat-step>
+
+            <!-- Step 2 -->
+            <mat-step [stepControl]="formTwo">
+                <!-- <form> -->
+                    <ng-template matStepLabel>Step 2: Contact Info</ng-template>
+                    <app-custom-form-two ></app-custom-form-two>
+
+                    <div class="custom-form-actions mt-4">
+                        <button mat-button matStepperPrevious>Back</button>
+                        <button mat-button matStepperNext [disabled]="formTwo.invalid">Next</button>
+                    </div>
+                <!-- </form> -->
+            </mat-step>
+
+            <!-- Final Step -->
+            <mat-step>
+                <ng-template matStepLabel>Review & Submit</ng-template>
+                <p class="my-4">Review all data and click submit.</p>
+
+                <div class="custom-form-actions mt-4">
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button color="primary" (click)="onSubmit()">Submit</button>
+                </div>
+            </mat-step>
+        </mat-horizontal-stepper>
+    </ng-container>
+</div>
+
+<!-- Step Indicators -->
+<!-- <div class="stepper-header d-flex mb-4">
+    <div *ngFor="let step of formSteps; let i = index" class="step-item me-3" [class.active]="activeForm === step.key"
+        [class.completed]="isStepCompleted(step.key)" >
+        <div class="step-index">{{ i + 1 }}</div>
+        <div class="step-label">{{ step.label }}</div>
+    </div>
+</div>
+
+<div class="custom-form-container p-5">
+    <div class="container my-3 ">
+        <div *ngIf="activeForm === customForms.FORM_ONE" [@inOutPaneAnimation]="{value:'',params:{delay:delay}}">
+            <app-custom-form-one></app-custom-form-one>
+        </div>
+        <div *ngIf="activeForm === customForms.FORM_TWO" [@inOutPaneAnimation]="{value:'',params:{delay:delay}}">
+            <app-custom-form-two></app-custom-form-two>
+        </div>
+    </div>
+    <div class="custom-form-actions">
+        <button *ngIf="stepChecker(false)" mat-button color="primary" (click)="onClickBack()">Back</button>
+        <button *ngIf="stepChecker(true)" mat-button color="primary" [disabled]="checkFormValidity()"
+            (click)="onClickNext()">Next</button>
+        <button mat-button color="primary" (click)="onSubmit()">Submit</button>
+    </div>
+</div> -->
+
+<!-- <div class="container-fluid">
+    <h4>Filter Array</h4>
+    <div class="users-container">
+        <input type="text" [(ngModel)]="filterUser" (ngModelChange)="filterUsers()"/>
+        <div *ngFor="let user of filteredDummyUsers">
+            {{user.name}} - {{user.surname}}
+        </div>
+    </div>
+</div> -->
+
+<!-- <div class="container-fluid">
+    <h4>On Push Stradegy</h4>
+    <input #userInp type="text"/>
+    <button mat-button color="primary" class="btn btn-default" (click)="addUser()">Add user</button>
+    <button mat-button color="primary" class="btn btn-default" (click)="globalClick()">Global click</button>
+    <div class="users-container my-3">
+        <ul>
+            <app-user *ngFor="let user of DUMMY_USERS" [user]="user"></app-user>
+        </ul>
+    </div>
+</div> -->

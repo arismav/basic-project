@@ -1,0 +1,5 @@
+<div class="custom-btn-container">
+    <button mat-stroked-button appClickOutside (clickOutside)="outsideClick()" class="custom-hover-btn" [ngClass]="{'activeBtn':isClicked}" (click)="toggleClick()">
+        <ng-content></ng-content>
+    </button>
+</div>

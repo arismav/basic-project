@@ -1,53 +1,72 @@
-<mat-toolbar>
-    <ng-content></ng-content>
-    <span routerLink="/dashboard">{{'dashboard.header.title' | translate}}</span>
-    <span class="example-spacer"></span>
+<div class="header-container">
 
-    <div class="flex-stretch"></div>
-    <mat-icon class="mr-8">brightness_5</mat-icon>
-    <mat-slide-toggle [checked]="darkMode" (change)="toggleDarkMode($event)" class="mr-8">
-    </mat-slide-toggle>
-    <mat-icon>bedtime</mat-icon>
+    <mat-toolbar>
+        <ng-content></ng-content>
+        <span routerLink="/dashboard">{{'dashboard.header.title' | translate}}</span>
+        <span class="example-spacer"></span>
 
-
-    <button mat-icon-button [matMenuTriggerFor]="lang">
-        <mat-icon>language</mat-icon>
-    </button>
-
-    <mat-menu #lang="matMenu">
-        <ng-container *ngFor="let lang of langs | keyvalue">
-            <button mat-menu-item (click)="switchLang($event)"
-                [ngClass]=" lang.key === currentLang ? 'active' : ''" [value]="lang.key">
-                {{lang.key}}
-            </button>
-        </ng-container>
-
-    </mat-menu>
-
-    <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>account_circle</mat-icon>
-    </button>
-
-    <mat-menu #menu="matMenu">
-        <mat-card class="example-card w-100">
-            <mat-card-header class="w-100">
-                <div mat-card-avatar class="example-header-image">
-                    <img class="img img-fluid" src="assets/profile-img.png">
-                </div>
-                <mat-card-title class="w-100">
-                    {{authUser.email}}</mat-card-title>
-                <mat-card-subtitle>{{authUser.username}}</mat-card-subtitle>
-              </mat-card-header>
-            <mat-card-actions class="d-flex flex-column stify-content-center">
-                <button mat-button class="favorite-icon" (click)="profileSidenav()" aria-label="Icon-button with heart icon">
-                    {{'dashboard.header.profile.profile' | translate}}
-                    <mat-icon>profile</mat-icon>
+        <div class="theme-toggle-modern">
+            <mat-slide-toggle
+              class="dark-mode-toggle"
+              [checked]="darkMode"
+              (change)="toggleDarkMode($event)">
+              <mat-icon class="sun-icon" *ngIf="!darkMode">light_mode</mat-icon>
+              <mat-icon class="moon-icon" *ngIf="darkMode">dark_mode</mat-icon>
+            </mat-slide-toggle>
+          </div>
+          
+        <div class="header-btn-container d-flex m-1">
+            <div app-hover-txt-btn [matMenuTriggerFor]="lang">
+                <mat-icon>language</mat-icon>
+                <span class="btn-txt">{{'dashboard.header.menu.language' | translate}}</span>
+            </div>
+            <div app-hover-txt-btn [matMenuTriggerFor]="menu">
+                <mat-icon>fastfood</mat-icon>
+                <span class="mx-1 cart-amount">{{cartItemsAmount}}</span>
+                <span class="btn-txt">{{'dashboard.header.menu.cart' | translate}}</span>
+            </div>
+            <div app-hover-txt-btn [matMenuTriggerFor]="menu">
+                <mat-icon>account_circle</mat-icon>
+                <span class="btn-txt">{{'dashboard.header.menu.profile' | translate}}</span>
+            </div>
+        </div>
+        <mat-menu #lang="matMenu">
+            <ng-container *ngFor="let lang of langs | keyvalue">
+                <button mat-menu-item (click)="switchLang($event)" [ngClass]=" lang.key === currentLang ? 'active' : ''"
+                    [value]="lang.key">
+                    {{lang.key}}
                 </button>
-                <button mat-button class="favorite-icon" (click)="logout()" aria-label="Icon-button with heart icon">
-                    {{'dashboard.header.profile.logout' | translate}}
-                    <mat-icon>logout</mat-icon>
-                </button>
-            </mat-card-actions>
-        </mat-card>
-    </mat-menu>
-</mat-toolbar>
+            </ng-container>
+        </mat-menu>
+
+
+
+
+        <mat-menu #menu="matMenu">
+            <mat-card class="example-card w-100">
+                <mat-card-header class="w-100">
+                    <div mat-card-avatar class="example-header-image">
+                        <img class="img img-fluid" src="assets/profile-img.png">
+                    </div>
+                    <mat-card-title class="w-100">
+                        {{authUser.email}}</mat-card-title>
+                    <mat-card-subtitle>{{authUser.username}}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-actions class="d-flex flex-column stify-content-center">
+                    <button mat-button class="favorite-icon" (click)="profileSidenav()"
+                        aria-label="Icon-button with heart icon">
+                        <mat-icon class="mr-2">person</mat-icon>{{'dashboard.header.profile.profile' | translate}}
+                    </button>
+                    <button mat-button class="favorite-icon" (click)="settingsSidenav()"
+                        aria-label="Icon-button with heart icon">
+                        <mat-icon class="mr-2">settings</mat-icon>{{'dashboard.header.profile.settings' | translate}}
+                    </button>
+                    <button mat-button class="favorite-icon" (click)="logout()"
+                        aria-label="Icon-button with heart icon">
+                        <mat-icon class="mr-2">logout</mat-icon>{{'dashboard.header.profile.logout' | translate}}
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+        </mat-menu>
+    </mat-toolbar>
+</div>

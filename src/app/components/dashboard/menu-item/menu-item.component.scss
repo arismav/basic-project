@@ -1,0 +1,64 @@
+// SCSS Variables
+$primary-color: #1a73e8;
+$text-color: #2c3e50;
+$hover-bg: #f4f6f9;
+$active-bg: #e8f0fe;
+$icon-color: #5f6368;
+$font-family: 'Roboto', 'Segoe UI', sans-serif;
+$transition: 0.15s ease-in-out;
+
+// Button Styling
+button[mat-button] {
+  width: 100%;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+  font-family: $font-family;
+  font-weight: 500;
+  color: $text-color;
+  border-radius: 6px;
+  background-color: transparent;
+  box-shadow: none;
+  transition: background-color $transition, box-shadow $transition, color $transition;
+
+  mat-icon {
+    font-size: 20px;
+    margin-right: 0.75rem; // tighter spacing
+    color: $icon-color;
+  }
+
+  .menu-txt {
+    margin-left: 0.5rem;
+    white-space: nowrap;
+    transition: color $transition;
+  }
+
+  &:hover {
+    background-color: $hover-bg;
+    color: $primary-color;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+    mat-icon {
+      color: $primary-color;
+    }
+  }
+
+  &.active {
+    background-color: $active-bg;
+    color: darken($primary-color, 10%);
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(26, 115, 232, 0.15);
+
+    mat-icon {
+      color: darken($primary-color, 10%);
+    }
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+  }
+}

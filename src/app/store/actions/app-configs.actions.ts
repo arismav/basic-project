@@ -3,7 +3,8 @@ import { Action } from '@ngrx/store';
 
 export enum AuthActionTypes {
     DARKMODE = '[DarkMode] Changed',
-    LANGUAGE = '[Language] Changed'
+    LANGUAGE = '[Language] Changed',
+    SIDENAV = '[SIDENAV] Changed'
 }
 
 export class DarkMode implements Action {
@@ -16,6 +17,12 @@ export class Language implements Action {
     constructor(public payload: string | null) { }
 }
 
+export class Sidenav implements Action {
+    readonly type = AuthActionTypes.SIDENAV;
+    constructor(public payload: boolean) { }
+}
+
 export type All =
     | DarkMode
     | Language
+    | Sidenav

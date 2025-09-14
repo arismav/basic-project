@@ -4,13 +4,25 @@
             "title": "Εφαρμογή",
             "profile": {
                 "logout": "Αποσύνδεση",
-                "profile": "Προφίλ"
+                "profile": "Προφίλ",
+                "settings": "Ρυθμίσεις"
+            },
+            "menu" : {
+                "profile": "Προφίλ",
+                "language": "Γλώσσα",
+                "cart": "Καλάθι"
             }
         },
         "sidenav": {
             "users": "Χρήστες",
             "data-table": "Πίνακας δεδομένων",
-            "profiles": "Προφίλ"
+            "profiles": "Προφίλ",
+            "food-menu": "Κατάλογος",
+            "custom-form": "Φόρμα"
         }
+    },
+    "auth": {
+        "login": "Είσοδος",
+        "register": "Εγγραφή"
     }
 }

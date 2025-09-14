@@ -3,11 +3,13 @@ import { All, AuthActionTypes } from "../actions/app-configs.actions";
 export interface State {
     darkMode: boolean;
     language: string | null;
+    sidenavOpened: boolean;
 }
 
 export const initialState: State = {
     darkMode: false,
-    language: null
+    language: null,
+    sidenavOpened: true
 };
 
 export function reducer(state = initialState, action: All): State {
@@ -25,6 +27,12 @@ export function reducer(state = initialState, action: All): State {
                 language: action.payload
             }
             return newState;
+        }
+        case AuthActionTypes.SIDENAV: {
+            return {
+                ...state,
+                sidenavOpened: action.payload
+            };
         }
         default: {
             return state;

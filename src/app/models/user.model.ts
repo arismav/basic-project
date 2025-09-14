@@ -14,3 +14,17 @@ export class User {
     // }
   }
   
+  export interface IDummyUser {
+    name: string,
+    surname: string
+  }
+
+  export class DummyUser implements IDummyUser{
+    name: string;
+    surname: string;
+
+    constructor(name: string, surname: string) {
+      this.name = name;
+      this.surname = surname;
+    }
+  }

@@ -10,6 +10,18 @@ import { AppState } from 'src/app/store/app.states';
 import { environment } from 'src/environments/environment';
 import { User } from '../../models/user.model';
 import * as entriesActions from '../../store/actions/entries.actions'
+import {
+  Auth,
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  sendEmailVerification,
+  // User
+} from '@angular/fire/auth';
 
 // import * as fromApp from '../../store/reducers/app.reducer';
 
@@ -31,13 +43,16 @@ export class AuthService {
     private _http: HttpClient,
     private _firebaseAuth: AngularFireAuth,
     private _router: Router,
-    private _store: Store<AppState>
+    private _store: Store<AppState>,
+    private _auth: Auth
   ) {
 
   }
 
   login(identifier: string, password: string) {
-    return this._http.post(`${this.mainUrl + this.auth}`, { identifier, password });
+    // return this._http.post(`${this.mainUrl + this.auth}`, { identifier, password });
+    // return this._firebaseAuth.signInWithEmailAndPassword(identifier, password);
+    return signInWithEmailAndPassword(this._auth, identifier, password);
   }
 
 
@@ -45,13 +60,12 @@ export class AuthService {
     return this._http.post(`${this.mainUrl + this.register}`, payload)
   }
 
+  registerUser(payload: {email: string, password: string}): Promise<any> {
+    return createUserWithEmailAndPassword(this._auth, payload.email, payload.password);
+  }
+
   logout() {
-    return this._firebaseAuth.signOut().then(() => {
-      localStorage.removeItem('user');
-      this._store.dispatch(new LogOut);
-      this._store.dispatch(restoreEntries());
-      this._router.navigate(['/auth']);
-    });
+    return signOut(this._auth);
   }
 
   forgotPassword(payload: { email: string }) {

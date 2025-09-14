@@ -3,4 +3,5 @@ export class AuthUser {
     email?: string;
     username?: string;
     jwt?: string;
+    roles?: string[]
 }

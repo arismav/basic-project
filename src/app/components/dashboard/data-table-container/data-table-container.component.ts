@@ -7,6 +7,7 @@ import { DashboardService } from '../dashboard.service';
 import { IEntry } from 'src/app/models/entry.model';
 import { selectEntries } from 'src/app/store/selectors/entries.selector';
 import { deleteEntryAPISuccess, invokeDeleteEntryAPI, invokeEntriesAPI } from 'src/app/store/actions/entries.actions';
+import { LoadingService } from 'src/app/helpers/services/loader.service';
 
 @Component({
   selector: 'app-data-table-container',
@@ -25,7 +26,8 @@ export class DataTableContainerComponent implements OnInit {
   public entries$ = this._store.pipe(select(selectEntries));
 
   constructor(
-    private _store: Store
+    private _store: Store,
+    public loadingService: LoadingService
   ) { }
 
   ngOnInit(): void {

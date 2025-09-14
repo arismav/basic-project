@@ -1,13 +1,15 @@
-<h2>Welcome to Mav Application</h2>
-<mat-tab-group mat-align-tabs="center" (selectedTabChange)="changeTab($event)">
-    <mat-tab label="Login">
-        <ng-container *ngIf="isLogin">
-            <app-sign-in [login]="isLogin"></app-sign-in>
-        </ng-container>
-    </mat-tab>
-    <mat-tab label="Register">
-        <ng-container *ngIf="!isLogin">
-            <app-sign-in [login]="isLogin"></app-sign-in>
-        </ng-container>
-    </mat-tab>
-</mat-tab-group>
+<div class="h-100 overflow-scroll">
+    <h2>Welcome to Mav Application</h2>
+    <mat-tab-group mat-align-tabs="center" (selectedTabChange)="changeTab($event)">
+        <mat-tab label="{{'auth.login' | translate}}">
+            <ng-container *ngIf="isLogin">
+                <app-sign-in [login]="isLogin"></app-sign-in>
+            </ng-container>
+        </mat-tab>
+        <mat-tab label="{{'auth.register' | translate}}">
+            <ng-container *ngIf="!isLogin">
+                <app-sign-in [login]="isLogin"></app-sign-in>
+            </ng-container>
+        </mat-tab>
+    </mat-tab-group>
+</div>

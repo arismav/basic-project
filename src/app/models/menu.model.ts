@@ -1,4 +1,6 @@
 export interface IMenu {
     label: string,
-    routerLink: string
+    icon: string,
+    routerLink: string,
+    role?: string | undefined
 }

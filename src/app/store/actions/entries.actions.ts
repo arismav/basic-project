@@ -43,7 +43,7 @@ export const updateEntryAPISuccess = createAction(
 
 export const restoreEntries = createAction(
     '[Restore Entries] Restore entries success',
-    // props<{ allEntries: IEntry[] }>()
+    props<{ allEntries: IEntry[] }>()
 );
 
 // export class restoreEntries implements Action {

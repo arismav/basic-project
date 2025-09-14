@@ -1,0 +1,17 @@
+<div class="cart-items" *ngFor="let cartItem of cartItems">
+    <div class="food-item">
+        <div class="food-item-id">
+            {{cartItem.id}}
+        </div>
+        <div class="food-item-name">
+            {{cartItem.name}}
+        </div>
+        <div class="food-item-description">
+            {{cartItem.description}}
+        </div>
+        <div class="food-item-price">
+            {{cartItem.price}}
+        </div>
+    </div>
+</div>
+<button (click)="clearCart()"></button>

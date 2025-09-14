@@ -1,0 +1,5 @@
+<p>Are you sure to quit?</p>
+<!-- <button type="button" (click)="closeModalAndSidenav()">Yes</button>
+<button type="button" (click)="closeModal($event)">No</button> -->
+<app-mat-dialog-btn [buttonType]="'button'" [buttonText]="'Yes'" [buttonColor]="'warn'" (onCloseDialog)="closeModalAndSidenav()"></app-mat-dialog-btn>
+<app-mat-dialog-btn [buttonType]="'button'" [buttonText]="'No'" [buttonColor]="'accent'" (onCloseDialog)="closeModal($event)"></app-mat-dialog-btn>

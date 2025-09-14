@@ -18,6 +18,7 @@ import { AuthService } from '../../auth.service';
 import * as fromAuth from '../../../../store/reducers/authenticate.reducer'
 import { LoadingService } from 'src/app/helpers/services/loader.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Auth, GoogleAuthProvider, signInWithRedirect } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-sign-in',
@@ -47,7 +48,8 @@ export class SignInComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder,
     private _store: Store<AppState>,
     public _loadingService: LoadingService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private _auth: Auth
   ) {
     console.log('login');
     console.log(this.login);
@@ -83,7 +85,7 @@ export class SignInComponent implements OnInit, OnDestroy {
       // email: ['', [Validators.required, Validators.email, Validators.pattern(
       //   '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,63}$',
       // ),]],
-      identifier: ['', [Validators.required]],
+      identifier: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(15), ValidateLowercase, ValidateUppercase, ValidateNumeric, ValidateSpecialchar]],
       // passwordconf: ['', [Validators.required]]
       // password: ['', [Validators.required]]
@@ -98,6 +100,14 @@ export class SignInComponent implements OnInit, OnDestroy {
 
   }
 
+  get username() {
+    return this.loginForm.get('identifier');
+  }
+
+
+  userNameChange() {
+    // console.log(this.username.errors);
+  }
 
 
   onSubmit = () => {
@@ -106,9 +116,12 @@ export class SignInComponent implements OnInit, OnDestroy {
       return;
     }
 
-    
-    if (!this.login && this.loginForm.get('password') !== this.loginForm.get('passwordconf')) {
-      this._snackBar.open('Password Confirmation is not matching', 'close');
+    console.log(this.login);
+    console.log(this.loginForm.get('password'))
+    console.log(this.loginForm.get('passwordconf'))
+
+    if (!this.login && this.loginForm.get('password').value !== this.loginForm.get('passwordconf').value) {
+      this._snackBar.open('Password Confirmation is not matching', 'close', {duration: 3000});
       return;
     }
 
@@ -127,23 +140,33 @@ export class SignInComponent implements OnInit, OnDestroy {
         identifier: username,
         password: password
       }
+      this._loadingService.setLoading(true);
       this._store.dispatch(new LogIn(payload));
 
     } else {
       // authPromise = this._authService.signup(email, password);
       const payload = {
-        username: username,
+        // username: username,
         email: email,
         password: password
       }
       console.log(payload);
-      this._authService.signup(payload).subscribe((register) => {
+      this._authService.registerUser(payload).then((register) => {
         console.log(register);
         this.isLoading = false;
+        // this.loginForm.reset();
+        if(register){
+          this._toastr.success("User Created Successfully");
+        }
       },
         error => {
           console.log(error);
         })
+
+      this.loginForm.reset();
+      // this.removeValidators(this.loginForm);
+      // this.loginForm.updateValueAndValidity();
+
     }
     this.removeValidators(this.loginForm);
   }
@@ -155,6 +178,10 @@ export class SignInComponent implements OnInit, OnDestroy {
     // this.initForm();
     console.log(this.isLoginMode);
 
+  }
+
+  getRequiredValidator(formControlName: string) {
+    return this.loginForm.get(`${formControlName}`)?.invalid && (this.loginForm.get(`${formControlName}`)?.dirty || this.loginForm.get(`${formControlName}`)?.touched) && this.loginForm.get(`${formControlName}`)?.errors?.required;
   }
 
   public removeValidators(form: FormGroup) {
@@ -174,6 +201,20 @@ export class SignInComponent implements OnInit, OnDestroy {
     this.subs.forEach((sub) => {
       sub.unsubscribe();
     })
+  }
+
+  loginWithGoogle = (): void => {
+    // this._firebaseAuth.signInWithPopup(new GoogleAuthProvider())
+    //   .then(googleResponse => {
+    //     // Successfully logged in
+    //     console.log(googleResponse);
+    //     // Add your logic here
+
+    //   }).catch(err => {
+    //     // Login error
+    //     console.log(err);
+    //   });
+    // signInWithRedirect(this._auth, new GoogleAuthProvider());
   }
 
 }

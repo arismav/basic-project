@@ -26,8 +26,7 @@ export class HttpResponseInterceptor implements HttpInterceptor {
                 },
                 error: (error) => {
                     console.log(error);
-                    this._toastr.error(error.error.error.message, error.error.error.status);
-
+                    this._toastr.error(error.message, error.status);
                 }
             }));
     }

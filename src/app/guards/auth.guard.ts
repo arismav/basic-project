@@ -9,12 +9,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, tap, take } from 'rxjs/operators';
 
-import { AuthService } from './auth.service';
+import { AuthService } from '../components/auth/auth.service';
 // import * as fromApp from '../../store/reducers/app.reducer';
 import { State, Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.states';
 import { selectAppState } from 'src/app/store/selectors/app.selector';
-import * as fromAuth from '../../store/reducers/authenticate.reducer'
+import * as fromAuth from '../store/reducers/authenticate.reducer'
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
@@ -52,22 +52,10 @@ export class AuthGuard implements CanActivate {
                 return this.onOtherPageLoggedOut();
             }
         })
-        // return this._store.select(selectAppState).pipe(
-        //     take<any>(1),
-        // map(authState => {
-        //     console.log(authState);
-        //     return authState;
-        // }),
-        // map((user:fromAuth.State) => {
-        // console.log(user);
-        // const isAuth = user.isAuthenticated;
-
-
-        // })
-        // );
     }
 
     onLoginPageLogged(): boolean {
+        console.log('redirect to dashboard');
         this._router.navigate(['/dashboard']);
         return true;
     }
@@ -77,6 +65,7 @@ export class AuthGuard implements CanActivate {
     }
 
     onOtherPageLoggedOut(): boolean {
+        console.log('here1')
         this._router.navigate(['/auth']);
         return false;
     }

@@ -1,0 +1,16 @@
+<div class="form-container">
+    <form [formGroup]="userProfileForm" (ngSubmit)="onSubmit()">
+        <mat-form-field class="w-75">
+            <input matInput placeholder="User Name" formControlName="username">
+            <mat-error *ngIf="getRequiredValidator('username')">
+                Username is required
+            </mat-error>
+            <mat-error *ngIf="username?.errors?.['minlength']">
+                Username must be at least 3 chars
+            </mat-error>
+            <mat-error *ngIf="username?.errors?.['maxlength']">
+                Username cannot be more than 10 chars
+            </mat-error>
+        </mat-form-field>
+    </form>
+</div>

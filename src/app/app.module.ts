@@ -38,7 +38,12 @@ import { localStorageSync, rehydrateApplicationState } from 'ngrx-store-localsto
 import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
 import { SingInContainerComponent } from './components/auth/sing-in-container/sing-in-container.component';
 import { SignInComponent } from './components/auth/sing-in-container/sing-in/sign-in.component';
-
+import { RolesService } from './helpers/services/roles.service';
+import { MatDialogComponent } from './components/shared/mat-dialog/mat-dialog.component';
+import { LanguageService } from './services/language.service';
+import { MatDialogBtnComponent } from './components/shared/mat-dialog-btn/mat-dialog-btn.component';
+import { provideAuth,getAuth } from '@angular/fire/auth';
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
 // const reducerss: ActionReducerMap<AppState> = {auth}
 
 export function localStorageSyncReducer(reducerss: ActionReducer<any>): ActionReducer<any> {
@@ -54,27 +59,33 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     NotFoundComponent,
     DialogComponent,
     ForgotPasswordComponent,
-    SingInContainerComponent
+    SingInContainerComponent,
+    MatDialogComponent,
+    MatDialogBtnComponent
+    // HoverTxtBtnComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    MaterialModule,
+    BrowserAnimationsModule,
     StoreModule.forRoot(reducers,{metaReducers}),
     StoreModule.forFeature('auth', reducers.auth),
     StoreModule.forFeature('appconfigs', reducers.appconfigs),
     EffectsModule.forRoot([AuthenticateEffects]),
     AngularFireModule.initializeApp(environment.firebase),
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAuth(() => getAuth()),
     AngularFireAuthModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
     AngularFireDatabaseModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    MatButtonModule,
-    MatInputModule,
     HttpClientModule,
     ToastrModule.forRoot(),
     MaterialModule,
+    TranslateModule,
     // Initializing TranslateModule with loader
     TranslateModule.forRoot({
       loader: {
@@ -93,6 +104,8 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
   ],
   providers: [
     StyleManagerService,
+    LanguageService,
+    RolesService,
     LoadingService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpResponseInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true }

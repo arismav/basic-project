@@ -4,13 +4,26 @@
             "title" : "Mav's app",
             "profile": {
                 "logout" : "Logout",
-                "profile": "Profile"
+                "profile": "Profile",
+                "settings": "Settings"
+            },
+            "menu" : {
+                "profile": "Profile",
+                "language": "Language",
+                "cart": "Cart"
             }
         },
         "sidenav" : {
             "users" : "Users",
             "data-table": "Data table",
-            "profiles" : "Profiles"
+            "profiles" : "Profiles",
+            "food-menu": "Food Menu",
+            "custom-form": "Form"
+
         }
+    },
+    "auth": {
+        "login": "Login",
+        "register": "Register"
     }
 }

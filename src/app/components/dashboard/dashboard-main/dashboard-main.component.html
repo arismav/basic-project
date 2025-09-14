@@ -1,29 +1,50 @@
-<div class="container-fluid p-0 h-100 d-flex flex-column">
-    <app-header>
-        <button mat-icon-button aria-label="Icon-button with menu icon" (click)="drawer.toggle()">
-            <mat-icon *ngIf="!drawer.opened">menu</mat-icon>
-            <mat-icon *ngIf="drawer.opened">close</mat-icon>
-        </button>
-    </app-header>
-    <div class="container-fluid main-container p-0">
-        <mat-drawer-container class="drawer-container h-100" autosize>
-            <mat-drawer #drawer class="drawer-sidenav p-3" mode="side" drawer>
-                <app-sidenav></app-sidenav>
-            </mat-drawer>
-            <mat-drawer #rightSideNav class="drawer-sidenav p-3" mode="over" position="end">
-                <div class="container">
-                    <ng-template [cdkPortalOutlet]="_rightSideComponent$ | async"></ng-template>
-                </div>
-            </mat-drawer>
-            <!-- <mat-sidenav-container class="example-container">
-                <mat-sidenav #rightSideNav="matSidenav" mode="over" position="end">
-                    <div class="container">
-                        <ng-template [cdkPortalOutlet]="_rightSideComponent$ | async"></ng-template>
-                    </div>
-                </mat-sidenav>
-            </mat-sidenav-container> -->
-            <router-outlet></router-outlet>
-
-        </mat-drawer-container>
-    </div>
-</div>
+<div class="container-fluid p-0 h-100">
+    <mat-drawer-container class="h-100 d-flex" autosize>
+      
+      <!-- Sticky Sidebar -->
+      <mat-drawer #drawer
+                  appMatDrawerHover
+                  class="drawer-sidenav"
+                  [ngClass]="(resized || (breakpointObserver | async)?.matches) ? 'resized' : ''"
+                  mode="side"
+                  opened="true">
+        <app-sidenav></app-sidenav>
+      </mat-drawer>
+  
+      <!-- Main content area: Header on top, then scrollable content -->
+      <mat-drawer-content class="d-flex flex-column w-100 h-100">
+        
+        <!-- Sticky Header (Right of Sidebar) -->
+        <app-header class="app-header-sticky">
+          <button *ngIf="!(breakpointObserver | async)?.matches"
+                  mat-icon-button
+                  aria-label="Toggle Sidebar"
+                  (click)="resizeDrawer()">
+            <mat-icon *ngIf="resized">menu</mat-icon>
+            <mat-icon *ngIf="!resized">more_vert</mat-icon>
+          </button>
+        </app-header>
+  
+        <!-- Scrollable Content -->
+        <div class="content-scrollable flex-grow-1 overflow-auto">
+          <router-outlet></router-outlet>
+        </div>
+  
+      </mat-drawer-content>
+  
+      <!-- Optional Right Drawer -->
+      <mat-drawer disableClose
+                  appClickOutside
+                  (clickOutside)="clickOutsideDrawer()"
+                  #rightSideNav
+                  class="drawer-sidenav p-3"
+                  mode="over"
+                  position="end">
+        <div class="container">
+          <ng-template [cdkPortalOutlet]="_rightSideComponent$ | async"></ng-template>
+        </div>
+      </mat-drawer>
+  
+    </mat-drawer-container>
+  </div>
+  

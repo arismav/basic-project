@@ -6,8 +6,8 @@
     </mat-form-field>
 
     <div class="custom-filters d-flex justify-content-end align-items-center flex-wrap my-3">
-        <div class="filters-container d-flex align-items-center flex-wrap justify-content-center">
-            <mat-form-field appearance="outline" *ngFor="let filter of filterSelectObj" class="form-field">
+        <div class="filters-container w-100 d-flex align-items-center flex-wrap justify-content-end">
+            <mat-form-field appearance="outline" *ngFor="let filter of filterSelectObj" class="form-field m-0">
                 <mat-label>Filter {{filter.name}}</mat-label>
                 <select matNativeControl name="{{filter.columnProp}}" [(ngModel)]="filter.modelValue"
                     (change)="filterChange(filter,$event)">

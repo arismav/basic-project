@@ -13,48 +13,45 @@ export interface State {
 export const initialState: State = {
     isAuthenticated: false,
     user: null,
-    error : {
+    error: {
         errorMessage: null,
         errorCode: ''
     }
-};
+}
 
 export function reducer(state = initialState, action: All): State {
     switch (action.type) {
         case AuthActionTypes.LOGIN_SUCCESS: {
-            console.log('Auth Reducer Here')
-            console.log(action);
-            const newState = {
+            return {
                 ...state,
                 isAuthenticated: true,
                 user: {
-                    id: action.payload.user.id,
+                    id: action.payload.user.uid,
                     email: action.payload.user.email,
                     username: action.payload.user.username,
-                    jwt: action.payload.jwt
+                    jwt: action.payload.user.accessToken
                 },
                 error: {
                     errorMessage: null,
                     errorCode: null
                 }
-            }
-            console.log(newState);
-            localStorage.setItem('auth', JSON.stringify(newState));
-            return newState;
+            };
         }
         case AuthActionTypes.LOGIN_FAILURE: {
             console.log(action.payload);
-            return {
+            const newState = {
                 ...state,
-                error : {
-                    errorMessage: action.payload.error.message,
-                    errorCode: action.payload.error.status
+                error: {
+                    errorMessage: action.payload.errorMsg,
+                    errorCode: action.payload.error
                 }
             };
+            return newState;
         }
         case AuthActionTypes.LOGOUT: {
-            return initialState;
-          }
+            const newState = { ...initialState };
+            return newState;
+        }
         default: {
             return state;
         }
