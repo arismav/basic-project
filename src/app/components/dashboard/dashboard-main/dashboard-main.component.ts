@@ -7,7 +7,7 @@ import * as fromAppConfigs from '../../../store/reducers/app-configs.reducer';
 import * as fromAppConfigsActions from '../../../store/actions/app-configs.actions';
 import { map, tap, take, takeUntil } from 'rxjs/operators';
 import { DashboardService } from '../dashboard.service';
-import { selectAppConfigsState } from 'src/app/store/selectors/app.selector';
+import { selectAppConfigsState, selectAppState } from 'src/app/store/selectors/app.selector';
 import { BreakpointState } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogComponent } from '../../shared/mat-dialog/mat-dialog.component';
@@ -27,6 +27,7 @@ export class DashboardMainComponent implements OnInit, AfterViewInit, OnDestroy 
   @ViewChild(MatDrawerContainer) _drawerContainer!: MatDrawerContainer;
   @ViewChild('drawer') drawer!: MatDrawer;
   dialogIsOpened: boolean = false;
+  isAuthenticated$: any;
 
   public storeSidenavOpened = this._store.select(selectAppConfigsState);
 
@@ -49,8 +50,16 @@ export class DashboardMainComponent implements OnInit, AfterViewInit, OnDestroy 
     // private _store: Store<fromApp.AppState>
     public _dashboardService: DashboardService,
     private _store: Store<fromAppConfigs.State>,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private _ch: ChangeDetectorRef
   ) {
+
+    this.isAuthenticated$ = this._store.select(selectAppState).pipe(
+      map(state => {state.isAuthenticated
+        this._ch.detectChanges();
+      console.log(state.isAuthenticated)
+      })
+    );
 
     this.breakpointObserver = this._dashboardService.getScreenObserver();
 

@@ -25,34 +25,24 @@ export class AuthGuard implements CanActivate {
         private _store: Store<AppState>
     ) { }
 
-    canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
+    canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> {
         this.url = state.url;
-        console.log(this.url);
-        // const token = 
-        // const isAuth = (localStorage.getItem('token') !== null);
-        this._store.select(selectAppState).pipe(
-            take(1),
-            map(authState => {
-                console.log(authState);
-                return authState;
-            })
-        ).subscribe((state) => {
-            console.log(state);
-            const isAuth = state.isAuthenticated;
+        console.log('Checking AuthGuard for route: ', this.url);
+      
+        return this._store.select(selectAppState).pipe(
+          take(1),
+          map(authState => {
+            const isAuth = authState.isAuthenticated;
+      
             if (isAuth) {
-                if (this.url === '/auth') {
-                    console.log('here');
-                    return this.onLoginPageLogged();
-                }
-                return this.onOtherPageLogged();
+              return (this.url === '/auth') ? this.onLoginPageLogged() : this.onOtherPageLogged();
             } else {
-                if (this.url === '/auth') {
-                    return true;
-                }
-                return this.onOtherPageLoggedOut();
+              return (this.url === '/auth') ? true : this.onOtherPageLoggedOut();
             }
-        })
-    }
+          })
+        );
+      }
+      
 
     onLoginPageLogged(): boolean {
         console.log('redirect to dashboard');
@@ -61,6 +51,7 @@ export class AuthGuard implements CanActivate {
     }
 
     onOtherPageLogged(): boolean {
+        console.log('here here')
         return true;
     }
 

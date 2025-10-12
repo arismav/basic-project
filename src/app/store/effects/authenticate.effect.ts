@@ -154,7 +154,8 @@ export class AuthenticateEffects {
                     id: action.payload.user.uid,
                     email: action.payload.user.email,
                     username: action.payload.user.username,
-                    jwt: action.payload.user.accessToken
+                    jwt: action.payload.user.accessToken,
+                    roles: ['usvi']
                 },
                 error: {
                     errorMessage: null,
