@@ -10,8 +10,8 @@ import { DashboardService } from '../dashboard.service';
 import { selectEntries } from '../../../store/selectors/entries.selector'
 import { invokeEntriesAPI, invokeSaveNewEntryAPI, updateEntryAPI } from 'src/app/store/actions/entries.actions';
 import { combineLatest, forkJoin } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../shared/dialog/dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-data-table-view',

@@ -1,5 +1,4 @@
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { select, Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
 import { DashboardService } from '../dashboard.service';
@@ -8,6 +7,7 @@ import { IEntry } from 'src/app/models/entry.model';
 import { selectEntries } from 'src/app/store/selectors/entries.selector';
 import { deleteEntryAPISuccess, invokeDeleteEntryAPI, invokeEntriesAPI } from 'src/app/store/actions/entries.actions';
 import { LoadingService } from 'src/app/helpers/services/loader.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-data-table-container',

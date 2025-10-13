@@ -14,12 +14,12 @@
     <form [formGroup]="form" (ngSubmit)="submit()">
         <div class="row">
             <div class="col-md-6 col-sm-12 d-flex flex-column">
-                <mat-form-field appearance="standard">
+                <mat-form-field appearance="fill">
                     <mat-label>Id</mat-label>
                     <input matInput placeholder="Id" formControlName="id">
                 </mat-form-field>
 
-                <mat-form-field appearance="standard">
+                <mat-form-field appearance="fill">
                     <mat-label>Api</mat-label>
                     <input matInput placeholder="Type api name" formControlName="API">
                     <mat-error
@@ -34,7 +34,7 @@
                     </mat-error>
                 </mat-form-field>
 
-                <mat-form-field appearance="standard">
+                <mat-form-field appearance="fill">
                     <mat-label>Auth</mat-label>
                     <mat-select formControlName="Auth" name="auth">
                         <mat-option *ngFor="let option of authOptions" [value]="option">
@@ -46,7 +46,7 @@
                         Auth is required
                     </mat-error> -->
                 </mat-form-field>
-                <mat-form-field appearance="standard">
+                <mat-form-field appearance="fill">
                     <mat-label>Category</mat-label>
                     <mat-select formControlName="Category" name="category">
                         <mat-option *ngFor="let option of categories" [value]="option">
@@ -60,7 +60,7 @@
                 </mat-form-field>
             </div>
             <div class="col-md-6 col-sm-12 d-flex flex-column">
-                <mat-form-field appearance="standard">
+                <mat-form-field appearance="fill">
                     <mat-label>Cors</mat-label>
                     <mat-select formControlName="Cors" name="Cors">
                         <mat-option [value]="'yes'">
@@ -76,7 +76,7 @@
                     </mat-error>
                 </mat-form-field>
 
-                <mat-form-field appearance="standard">
+                <mat-form-field appearance="fill">
                     <mat-label>Description</mat-label>
                     <input matInput formControlName="Description" placeholder="Type description">
                     <mat-error
@@ -85,7 +85,7 @@
                     </mat-error>
                 </mat-form-field>
 
-                <mat-form-field appearance="standard">
+                <mat-form-field appearance="fill">
                     <mat-label>Https</mat-label>
                     <mat-select formControlName="HTTPS" name="Https">
                         <mat-option [value]="true">
@@ -101,7 +101,7 @@
                     </mat-error>
                 </mat-form-field>
 
-                <mat-form-field appearance="standard">
+                <mat-form-field appearance="fill">
                     <mat-label>Link</mat-label>
                     <input matInput formControlName="Link" placeholder="Type link">
                     <mat-error

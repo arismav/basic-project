@@ -17,8 +17,8 @@ import { ValidateUppercase } from '../../../../helpers/validators/uppercase.vali
 import { AuthService } from '../../auth.service';
 import * as fromAuth from '../../../../store/reducers/authenticate.reducer'
 import { LoadingService } from 'src/app/helpers/services/loader.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Auth, GoogleAuthProvider, signInWithRedirect } from '@angular/fire/auth';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-sign-in',

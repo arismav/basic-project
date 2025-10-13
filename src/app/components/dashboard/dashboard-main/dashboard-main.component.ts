@@ -1,5 +1,4 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { MatDrawer, MatDrawerContainer, MatSidenav, MatSidenavContainer } from '@angular/material/sidenav';
 import { Store } from '@ngrx/store';
 import { Observable, Subject, delay } from 'rxjs';
@@ -9,8 +8,8 @@ import { map, tap, take, takeUntil } from 'rxjs/operators';
 import { DashboardService } from '../dashboard.service';
 import { selectAppConfigsState, selectAppState } from 'src/app/store/selectors/app.selector';
 import { BreakpointState } from '@angular/cdk/layout';
-import { MatDialog } from '@angular/material/dialog';
 import { MatDialogComponent } from '../../shared/mat-dialog/mat-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dashboard-main',
