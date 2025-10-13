@@ -12,7 +12,7 @@ import { LoadingSpinnerComponent } from './components/shared/loading-spinner/loa
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { DashboardMainComponent } from './components/dashboard/dashboard-main/dashboard-main.component';
 import { HeaderComponent } from './components/dashboard/header/header.component';
@@ -49,66 +49,58 @@ export function localStorageSyncReducer(reducerss: ActionReducer<any>): ActionRe
   return localStorageSync({keys: ['auth', 'appconfigs'],rehydrate: true})(reducerss);
 }
 const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
-@NgModule({
-  declarations: [
-    AppComponent,
-    AuthComponent,
-    SignInComponent,
-    LoadingSpinnerComponent,
-    NotFoundComponent,
-    DialogComponent,
-    ForgotPasswordComponent,
-    SingInContainerComponent,
-    MatDialogComponent,
-    MatDialogBtnComponent
-    // HoverTxtBtnComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    MaterialModule,
-    BrowserAnimationsModule,
-    StoreModule.forRoot(reducers,{metaReducers}),
-    StoreModule.forFeature('auth', reducers.auth),
-    StoreModule.forFeature('appconfigs', reducers.appconfigs),
-    EffectsModule.forRoot([AuthenticateEffects]),
-    AngularFireModule.initializeApp(environment.firebase),
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth()),
-    AngularFireAuthModule,
-    AngularFirestoreModule,
-    AngularFireStorageModule,
-    AngularFireDatabaseModule,
-    BrowserAnimationsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    ToastrModule.forRoot(),
-    MaterialModule,
-    TranslateModule,
-    // Initializing TranslateModule with loader
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader, // Main provider for loader
-        useClass: customTranslate, // Custom Loader
-        deps: [HttpClient], // Dependencies which helps serving loader
-      }
-    }),
-
-    // EffectsModule.forRoot([]),
-    // StoreModule.forFeature([reducers]),
-    // EffectsModule.forFeature([AuthenticationEffect]),
-    StoreDevtoolsModule.instrument({connectInZone: true}),
-    MatPasswordStrengthModule.forRoot()
-
-  ],
-  providers: [
-    StyleManagerService,
-    LanguageService,
-    RolesService,
-    LoadingService,
-    { provide: HTTP_INTERCEPTORS, useClass: HttpResponseInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true }
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        AuthComponent,
+        SignInComponent,
+        LoadingSpinnerComponent,
+        NotFoundComponent,
+        DialogComponent,
+        ForgotPasswordComponent,
+        SingInContainerComponent,
+        MatDialogComponent,
+        MatDialogBtnComponent
+        // HoverTxtBtnComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        MaterialModule,
+        BrowserAnimationsModule,
+        StoreModule.forRoot(reducers, { metaReducers }),
+        StoreModule.forFeature('auth', reducers.auth),
+        StoreModule.forFeature('appconfigs', reducers.appconfigs),
+        EffectsModule.forRoot([AuthenticateEffects]),
+        AngularFireModule.initializeApp(environment.firebase),
+        provideFirebaseApp(() => initializeApp(environment.firebase)),
+        provideAuth(() => getAuth()),
+        AngularFireAuthModule,
+        AngularFirestoreModule,
+        AngularFireStorageModule,
+        AngularFireDatabaseModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        ToastrModule.forRoot(),
+        MaterialModule,
+        TranslateModule,
+        // Initializing TranslateModule with loader
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader, // Main provider for loader
+                useClass: customTranslate, // Custom Loader
+                deps: [HttpClient], // Dependencies which helps serving loader
+            }
+        }),
+        // EffectsModule.forRoot([]),
+        // StoreModule.forFeature([reducers]),
+        // EffectsModule.forFeature([AuthenticationEffect]),
+        StoreDevtoolsModule.instrument({ connectInZone: true }),
+        MatPasswordStrengthModule.forRoot()], providers: [
+        StyleManagerService,
+        LanguageService,
+        RolesService,
+        LoadingService,
+        { provide: HTTP_INTERCEPTORS, useClass: HttpResponseInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule { }
