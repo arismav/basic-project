@@ -97,7 +97,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     // EffectsModule.forRoot([]),
     // StoreModule.forFeature([reducers]),
     // EffectsModule.forFeature([AuthenticationEffect]),
-    StoreDevtoolsModule.instrument(),
+    StoreDevtoolsModule.instrument({connectInZone: true}),
     MatPasswordStrengthModule.forRoot()
 
   ],
