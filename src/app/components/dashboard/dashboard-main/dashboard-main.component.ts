@@ -75,7 +75,12 @@ export class DashboardMainComponent implements OnInit, AfterViewInit, OnDestroy 
     // setTimeout(() => {
       this.resized = !this.resized;
       this._store.dispatch(new fromAppConfigsActions.Sidenav(!this.resized));
+  
     // }, 500);
+    setTimeout(() => {
+      this._ch.detectChanges();
+      this._ch.markForCheck();
+    }, 310);
  
   }
 

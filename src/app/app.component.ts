@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { filter, map } from 'rxjs/operators';
 import { AuthService } from './components/auth/auth.service';
-import { LanguageService } from './services/language.service';
+import { LanguageService } from './helpers/services/language.service';
 import { AppState } from './store/app.states';
 import { selectAppConfigsState } from './store/selectors/app.selector';
 

@@ -28,7 +28,7 @@ import { FoodMenuComponent } from './food-menu/food-menu.component';
 import { FoodMenuItemComponent } from './food-menu/food-menu-item/food-menu-item.component';
 import { FoodMenuCartComponent } from './food-menu/food-menu-cart/food-menu-cart.component';
 import { ClickOutsideDirective } from 'src/app/helpers/directives/click-outside.directive';
-import { LanguageService } from 'src/app/services/language.service';
+import { LanguageService } from 'src/app/helpers/services/language.service';
 import { CustomFormComponent } from './custom-form/custom-form.component';
 import { CustomFormOneComponent } from './custom-form/custom-form-one/custom-form-one.component';
 import { CustomFormTwoComponent } from './custom-form/custom-form-two/custom-form-two.component';
@@ -39,7 +39,7 @@ import { UserComponent } from './custom-form/user/user.component';
   declarations: [
     DashboardMainComponent,
     HeaderComponent,
-    UsersComponent,
+    // UsersComponent,
     SidenavComponent,
     DataTableComponent,
     CustomFormComponent,

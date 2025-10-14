@@ -15,7 +15,7 @@ import { AppState } from 'src/app/store/app.states';
 import { DarkMode, Language } from 'src/app/store/actions/app-configs.actions';
 import { ProfileComponent } from '../profile/profile.component';
 import { SettingsComponent } from '../settings/settings.component';
-import { LanguageService } from 'src/app/services/language.service';
+import { LanguageService } from 'src/app/helpers/services/language.service';
 import { restoreEntries } from 'src/app/store/actions/entries.actions';
 import { LogOut } from 'src/app/store/actions/authenticate.actions';
 import { Router } from '@angular/router';

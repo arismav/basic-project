@@ -38,7 +38,7 @@ import { SingInContainerComponent } from './components/auth/sing-in-container/si
 import { SignInComponent } from './components/auth/sing-in-container/sing-in/sign-in.component';
 import { RolesService } from './helpers/services/roles.service';
 import { MatDialogComponent } from './components/shared/mat-dialog/mat-dialog.component';
-import { LanguageService } from './services/language.service';
+import { LanguageService } from './helpers/services/language.service';
 import { MatDialogBtnComponent } from './components/shared/mat-dialog-btn/mat-dialog-btn.component';
 import { provideAuth,getAuth } from '@angular/fire/auth';
 import { initializeApp,provideFirebaseApp } from '@angular/fire/app';

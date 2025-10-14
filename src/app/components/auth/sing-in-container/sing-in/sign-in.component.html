@@ -2,7 +2,7 @@
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate class="d-flex-center">
     <div class="form-container">
       <div>
-        <mat-form-field class="w-75">
+        <mat-form-field class="w-75" appearance="outline">
           <input matInput (input)="userNameChange()" placeholder="Username" formControlName="identifier">
           <mat-error *ngIf="getRequiredValidator('identifier')">
             Username is required
@@ -16,7 +16,7 @@
         </mat-form-field>
       </div>
       <div *ngIf="!login">
-        <mat-form-field class="w-75">
+        <mat-form-field class="w-75" appearance="outline">
           <input matInput placeholder="Email" formControlName="email">
           <mat-error *ngIf="!loginForm.get('email')?.errors?.required && (loginForm.get('email')?.errors?.pattern)">
             Please enter a valid email address
@@ -27,7 +27,7 @@
         </mat-form-field>
       </div>
       <div class="mt-top-2">
-        <mat-form-field class="w-75">
+        <mat-form-field class="w-75" appearance="outline">
           <input matInput [type]="hidePass ? 'password' : 'text'" placeholder="Password" formControlName="password">
           <mat-icon matSuffix (click)="hidePass = !hidePass">{{hidePass ? 'visibility_off' : 'visibility'}}</mat-icon>
 
@@ -74,7 +74,7 @@
           </mat-password-strength-info>
         </ng-container>
         <div *ngIf="!login">
-          <mat-form-field class="w-75">
+          <mat-form-field class="w-75" appearance="outline">
             <input matInput [type]="hidePassConf ? 'password' : 'text'" placeholder="Password Confirmation"
               formControlName="passwordconf">
             <mat-icon matSuffix (click)="hidePassConf = !hidePassConf">{{hidePassConf ? 'visibility_off' :
