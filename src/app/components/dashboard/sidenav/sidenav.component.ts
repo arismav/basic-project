@@ -30,10 +30,4 @@ export class SidenavComponent implements OnInit {
   ngOnInit(): void {
   }
 
-
-  // routeHandler = (routerLink: string): void => {
-  //   console.log('router');
-  //   this._router.navigate([`${routerLink}`], {relativeTo: this._activatedRoute});
-  // }
-
 }

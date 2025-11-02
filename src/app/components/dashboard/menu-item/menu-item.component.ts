@@ -16,8 +16,7 @@ export class MenuItemComponent implements OnInit {
 
   constructor(
     private _router: Router,
-    private _activatedRoute: ActivatedRoute,
-    private _translationService: TranslateService
+    private _activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -25,13 +24,9 @@ export class MenuItemComponent implements OnInit {
     console.log(this.menuItemTranslation);
   }
 
-  routeHandler = (routerLink: string): void => {
-    console.log('router');
-    this._router.navigate([`${routerLink}`], { relativeTo: this._activatedRoute });
-  }
-
-  // getTranslation = (menuItem: any) => {
-  //   return this._translationService.instant(`dashboard.sidenav.${menuItem.label}`);
+  // routeHandler = (routerLink: string): void => {
+  //   console.log('router');
+  //   this._router.navigate([`${routerLink}`], { relativeTo: this._activatedRoute });
   // }
 
 }

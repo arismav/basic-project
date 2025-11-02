@@ -65,15 +65,6 @@ export class HeaderComponent implements OnInit {
     private _ch: ChangeDetectorRef
   ) {
 
-    // this._firebaseAuth.onAuthStateChanged((user) => {
-    //   console.log(user);
-    //   if(user){
-    //     if(user.emailVerified === false) {
-    //       // this.logout();
-    //       console.log(user);
-    //     }
-    //   }
-    // })
 
     this.langs = this._languageService.langs;
     console.log(this.langs);
@@ -82,9 +73,6 @@ export class HeaderComponent implements OnInit {
       this.cartItemsAmount = cartItems.length
     })
 
-    // this.currentLang = this._languageService.getCurrentLanguage();
-    // console.log(currentLang);
-    // console.log(this.currentLang);
 
   }
 
@@ -118,15 +106,15 @@ export class HeaderComponent implements OnInit {
 
   logout = () => {
     console.log('Trying to logout...');
-  
+
     this._authService.logout().then(() => {
       console.log('SignOut initiated.');
-  
+
       const interval = setInterval(() => {
         if (!this.auth.currentUser) {
           clearInterval(interval);
           console.log('Fully signed out.');
-  
+
           // Καθάρισε localStorage και state
           // localStorage.removeItem('auth');
           this._store.dispatch(new AuthActions.LogOut());
@@ -139,48 +127,6 @@ export class HeaderComponent implements OnInit {
     });
   };
 
-  // logout = () => {
-
-  //   console.log(this.auth.currentUser);
-
-  //   this._authService.logout().then((res) => {
-  //     console.log(res);
-  //   localStorage.removeItem('auth');
-  //   this._store.dispatch(new AuthActions.LogOut());
-
-  //   })
-
-
-  //   // this._firebaseAuth.user.subscribe((user) => {
-  //   //   console.log(user);
-  //   //   if (user) {
-  //   //     // this._firebaseAuth.signOut();
-
-  //   // return signOut(this.auth).then((res) => {
-  //   //   console.log(res);
-  //   // })
-  //   // return this._firebaseAuth.signOut()
-
-  //   //   }
-  //   // })
-  //   // this._ch.detectChanges();
-  //   // localStorage.removeItem('auth');
-  //   // this._router.navigate(['/auth']);
-  //   // this._ngZone.run(()=> {
-  //   //   // this._authService.logout();
-
-  //   // })
-
-  //   // .then((res) => {
-  //   //   console.log(res);
-  //   //   this._ngZone.run(() => {
-  //   //     this._store.dispatch(new AuthActions.LogOut());
-  //   //   })
-  //   // })
-  //   // .catch((error)=> {
-  //   //   console.log(error);
-  //   // })
-  // }
 
   switchLang(e: any) {
     // this._translateService.use(e.target.value);
@@ -196,10 +142,14 @@ export class HeaderComponent implements OnInit {
     if ((e?.checked) || check) {
       console.log('here');
       this._store.dispatch(new DarkMode(true));
-      document.getElementsByTagName('app-header')[0]?.parentElement?.classList.add(darkClassName);
+      document.getElementsByTagName('body')[0]?.classList.add(darkClassName);
+      setTimeout(() => {
+        document.getElementsByTagName('p-table')[0]?.classList.add(darkClassName);
+      }, 0);
     } else {
       this._store.dispatch(new DarkMode(false));
-      document.getElementsByTagName('app-header')[0]?.parentElement?.classList.remove(darkClassName);
+      document.getElementsByTagName('body')[0]?.classList.remove(darkClassName);
+      document.getElementsByTagName('p-table')[0]?.classList.remove(darkClassName);
     }
   }
 

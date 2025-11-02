@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CustomFormOneComponent } from './custom-form-one.component';
 
 describe('CustomFormOneComponent', () => {
@@ -8,7 +8,8 @@ describe('CustomFormOneComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CustomFormOneComponent ]
+      declarations: [ CustomFormOneComponent ],
+      imports: [HttpClientTestingModule]
     })
     .compileComponents();
 

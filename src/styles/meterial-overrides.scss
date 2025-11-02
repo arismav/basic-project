@@ -8,12 +8,13 @@
     }
 }
 
-@media(min-width:768px) {
-    .cdk-overlay-connected-position-bounding-box {
-        margin-left: 80px !important;
-    }
+.mat-mdc-menu-content {
+    padding: 0 !important;
 }
 
+.mat-mdc-menu-panel {
+    max-width: 300px !important;
+}
 
 
 .mat-progress-spinner {
@@ -159,5 +160,3 @@
     // padding-right: 10px !important;
     // padding-top: 20px;
 }
-
-

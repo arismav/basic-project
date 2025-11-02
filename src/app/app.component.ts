@@ -39,7 +39,7 @@ import { selectAppConfigsState } from './store/selectors/app.selector';
 export class AppComponent implements OnInit {
 
   appTitle = `Mav's app`;
-
+  title = 'app-mav-oct-22'; // ✨ Πρόσθεσέ το πάλι εδώ
   langs: any = { 'el': 'Greek', 'en': 'English' };
 
   constructor(

@@ -18,6 +18,7 @@ export class RolesDirective implements OnInit {
 
   ngOnInit() {
     this._store.select(selectAppState).subscribe((auth) => {
+      console.log(auth.user);
       if (auth)
         this.checkIfRoleExists(auth.user?.roles);
     })

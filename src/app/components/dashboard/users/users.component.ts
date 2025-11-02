@@ -1,100 +1,89 @@
-import { Component, OnInit } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
-
-import { TableModule } from 'primeng/table';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
-import { RippleModule } from 'primeng/ripple';
 import { ButtonModule } from 'primeng/button';
-import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { CommonModule } from '@angular/common';
-import { FileUploadModule } from 'primeng/fileupload';
-import { DropdownModule } from 'primeng/dropdown';
-import { TagModule } from 'primeng/tag';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { RatingModule } from 'primeng/rating';
-import { FormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { RippleModule } from 'primeng/ripple';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ProductService } from 'src/app/helpers/services/products.service';
-import { Product } from 'src/app/models/product.model';
 
 @Component({
   selector: 'app-users',
-  templateUrl: './users.component.html',
   standalone: true,
-  imports: [TableModule, DialogModule, RippleModule, ButtonModule, ToastModule, ToolbarModule, ConfirmDialogModule, InputTextModule, InputTextareaModule, CommonModule, FileUploadModule, DropdownModule, TagModule, RadioButtonModule, RatingModule, InputTextModule, FormsModule, InputNumberModule],
-  providers: [MessageService, ConfirmationService, ProductService],
-  styles: [
-    `:host ::ng-deep .p-dialog .product-image {
-            width: 150px;
-            margin: 0 auto 2rem auto;
-            display: block;
-        }`
-  ]
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.scss'],
+  imports: [
+    CommonModule,
+    FormsModule,
+    TableModule,
+    DialogModule,
+    ButtonModule,
+    ToolbarModule,
+    ToastModule,
+    ConfirmDialogModule,
+    InputTextModule,
+    InputTextareaModule,
+    InputNumberModule,
+    RippleModule
+  ],
+  providers: [MessageService, ConfirmationService, ProductService]
 })
 export class UsersComponent implements OnInit {
-  productDialog: boolean = false;
+  products: any[] = [];
+  totalRecords: number = 0;
+  loading = false;
 
-  products!: Product[];
+  productDialog = false;
+  product: any = {};
+  submitted = false;
+  selectedProducts: any[] = [];
+  searchTerm = '';
 
-  product!: Product;
-
-  selectedProducts!: Product[] | null;
-
-  submitted: boolean = false;
-
-  statuses!: any[];
-
-  constructor(private productService: ProductService, private messageService: MessageService, private confirmationService: ConfirmationService) { }
+  constructor(
+    private productService: ProductService,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
+    private ch: ChangeDetectorRef
+  ) { }
 
   ngOnInit() {
-    this.productService.getProducts().then((data) => (this.products = data));
+    this.loadProductsLazy({ first: 0, rows: 10 });
+  }
 
-    this.statuses = [
-      { label: 'INSTOCK', value: 'instock' },
-      { label: 'LOWSTOCK', value: 'lowstock' },
-      { label: 'OUTOFSTOCK', value: 'outofstock' }
-    ];
+  loadProductsLazy(event: TableLazyLoadEvent) {
+    this.loading = true;
+    const page = event.first ? event.first / (event.rows || 10) : 0;
+    const limit = event.rows || 10;
+    const sortField = event.sortField || '';
+    const sortOrder = event.sortOrder || 1;
+
+    this.productService
+      .getProductsPaginated(page, limit, sortField, sortOrder, this.searchTerm)
+      .subscribe({
+        next: (res) => {
+          this.products = res;
+          this.totalRecords = 100; // MockAPI δεν επιστρέφει total count — βάλε ένα περίπου ή μέτρα με άλλο call
+          this.loading = false;
+          this.ch.detectChanges();
+        },
+        error: (err) => {
+          console.error('Error fetching products', err);
+          this.loading = false;
+        }
+      });
   }
 
   openNew() {
     this.product = {};
     this.submitted = false;
     this.productDialog = true;
-  }
-
-  deleteSelectedProducts() {
-    this.confirmationService.confirm({
-      message: 'Are you sure you want to delete the selected products?',
-      header: 'Confirm',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.products = this.products.filter((val) => !this.selectedProducts?.includes(val));
-        this.selectedProducts = null;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-      }
-    });
-  }
-
-  editProduct(product: Product) {
-    this.product = { ...product };
-    this.productDialog = true;
-  }
-
-  deleteProduct(product: Product) {
-    this.confirmationService.confirm({
-      message: 'Are you sure you want to delete ' + product.name + '?',
-      header: 'Confirm',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.products = this.products.filter((val) => val.id !== product.id);
-        this.product = {};
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-      }
-    });
   }
 
   hideDialog() {
@@ -106,53 +95,92 @@ export class UsersComponent implements OnInit {
     this.submitted = true;
 
     if (this.product.name?.trim()) {
-      if (this.product.id) {
-        this.products[this.findIndexById(this.product.id)] = this.product;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-      } else {
-        this.product.id = this.createId();
-        this.product.image = 'product-placeholder.svg';
-        this.products.push(this.product);
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+      const request = this.product.id
+        ? this.productService.updateProduct(this.product.id, this.product)
+        : this.productService.createProduct(this.product);
+
+      request.subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successful',
+            detail: this.product.id ? 'Product Updated' : 'Product Created',
+            life: 3000
+          });
+          this.productDialog = false;
+          this.loadProductsLazy({ first: 0, rows: 10 });
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Operation failed',
+            life: 3000
+          });
+        }
+      });
+    }
+  }
+
+  deleteProduct(product: any) {
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete ${product.name}?`,
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.productService.deleteProduct(product.id).subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Deleted',
+              detail: 'Product deleted successfully',
+              life: 3000
+            });
+            this.loadProductsLazy({ first: 0, rows: 10 });
+          },
+          error: () => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to delete product',
+              life: 3000
+            });
+          }
+        });
       }
-
-      this.products = [...this.products];
-      this.productDialog = false;
-      this.product = {};
-    }
+    });
   }
 
-  findIndexById(id: string): number {
-    let index = -1;
-    for (let i = 0; i < this.products.length; i++) {
-      if (this.products[i].id === id) {
-        index = i;
-        break;
+  deleteSelectedProducts() {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete the selected products?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        const deletes = this.selectedProducts.map((p) =>
+          this.productService.deleteProduct(p.id).toPromise()
+        );
+        Promise.all(deletes).then(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successful',
+            detail: 'Products Deleted',
+            life: 3000
+          });
+          this.selectedProducts = [];
+          this.loadProductsLazy({ first: 0, rows: 10 });
+        });
       }
-    }
-
-    return index;
+    });
   }
 
-  createId(): string {
-    let id = '';
-    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (var i = 0; i < 5; i++) {
-      id += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return id;
+  onSearch() {
+    this.loadProductsLazy({ first: 0, rows: 10 });
   }
 
-  getSeverity(status: any) {
-    switch (status) {
-      case 'INSTOCK':
-        return 'success';
-      case 'LOWSTOCK':
-        return 'warning';
-      case 'OUTOFSTOCK':
-        return 'danger';
-      default:
-        return 'info';
-    }
+  editProduct(product: any) {
+    this.product = { ...product }; // κάνουμε shallow copy για να μην πειράζουμε το original
+    this.productDialog = true; // ανοίγει το dialog
   }
+
 }
