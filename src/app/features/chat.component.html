@@ -1,0 +1,49 @@
+<section class="p-4 max-w-2xl mx-auto">
+    <h2 class="text-2xl font-bold mb-2">WebSocket Chat</h2>
+  
+    <!-- Connection controls -->
+    <div class="mb-3 flex gap-2 items-center">
+      <button (click)="connect()" [disabled]="ws.isConnected()">Connect</button>
+      <button (click)="disconnect()" [disabled]="!ws.isConnected()">Disconnect</button>
+      <span>
+        Status: {{ ws.isConnected() ? 'connected' : 'disconnected' }}
+      </span>
+      <small>
+        Last pong: {{ ws.lastPongTs() || 0 | date:'medium' }}
+      </small>
+    </div>
+  
+    <!-- Room selection -->
+    <div class="mb-2">
+      <input
+        #roomInput
+        [value]="room()"
+        (input)="setRoom(roomInput.value)"
+        placeholder="Room name" />
+      <button (click)="join()">Join</button>
+    </div>
+  
+    <!-- Messages feed -->
+    <div class="border rounded p-3 h-72 overflow-auto mb-3">
+      <div *ngFor="let m of feed()">
+        <div *ngIf="m.type === 'system'" class="text-xs text-gray-600">
+          [system] {{ m.text }} — {{ m.ts | date:'shortTime' }}
+        </div>
+        <div *ngIf="m.type === 'chat'" class="text-sm">
+          <b>{{ m.from }}</b>: {{ m.text }}
+          <small class="text-gray-400">{{ m.ts | date:'shortTime' }}</small>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Send form -->
+    <form (submit)="send($event)" class="flex gap-2">
+      <input
+        #textInput
+        [value]="text()"
+        (input)="text.set(textInput.value)"
+        placeholder="Type message" />
+      <button [disabled]="!ws.isConnected()">Send</button>
+    </form>
+  </section>
+  

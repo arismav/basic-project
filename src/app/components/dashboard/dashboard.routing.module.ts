@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { ChatComponent } from 'src/app/features/chat.component';
 import { AuthGuard } from '../../guards/auth.guard';
 import { CustomFormComponent } from './custom-form/custom-form.component';
 import { DashboardMainComponent } from './dashboard-main/dashboard-main.component';
@@ -21,6 +22,13 @@ const routes: Routes = [
         component: UsersComponent,
         data: {
           title: 'Users'
+        }
+      },
+      {
+        path: 'webSocket',
+        component: ChatComponent,
+        data: {
+          title: 'WebSocket'
         }
       },
       {

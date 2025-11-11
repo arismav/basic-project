@@ -31,6 +31,12 @@ export class DashboardService {
       role : this._rolesService.userRoles.User_View
     },
     {
+      label: 'users',
+      icon: 'timeline',
+      routerLink: 'webSocket',
+      role : this._rolesService.userRoles.User_View
+    },
+    {
       label: 'profiles',
       icon: 'person',
       routerLink: 'profiles',
