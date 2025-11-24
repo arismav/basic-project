@@ -18,8 +18,8 @@
             "data-table": "Data table",
             "profiles" : "Profiles",
             "food-menu": "Food Menu",
-            "custom-form": "Form"
-
+            "custom-form": "Form",
+            "notifications": "Notifications"
         }
     },
     "auth": {

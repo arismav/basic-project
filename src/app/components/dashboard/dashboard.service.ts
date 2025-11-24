@@ -37,6 +37,18 @@ export class DashboardService {
       role : this._rolesService.userRoles.User_View
     },
     {
+      label: 'notifications',
+      icon: 'timeline',
+      routerLink: 'notifications',
+      role : this._rolesService.userRoles.User_View
+    },
+    {
+      label: 'users',
+      icon: 'timeline',
+      routerLink: 'grid-ws',
+      role : this._rolesService.userRoles.User_View
+    },
+    {
       label: 'profiles',
       icon: 'person',
       routerLink: 'profiles',

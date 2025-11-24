@@ -8,6 +8,8 @@ import { DataTableContainerComponent } from './data-table-container/data-table-c
 import { DataTableViewComponent } from './data-table-view/data-table-view.component';
 import { DataTableComponent } from './data-table/data-table.component';
 import { FoodMenuComponent } from './food-menu/food-menu.component';
+import { GridWsComponent } from './grid-ws/grid-ws.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 import { UsersComponent } from './users/users.component';
 
 
@@ -29,6 +31,20 @@ const routes: Routes = [
         component: ChatComponent,
         data: {
           title: 'WebSocket'
+        }
+      },
+      {
+        path: 'grid-ws',
+        component: GridWsComponent,
+        data: {
+          title: 'WebSocket'
+        }
+      },
+      {
+        path: 'notifications',
+        component: NotificationsComponent,
+        data: {
+          title: 'Notifications'
         }
       },
       {

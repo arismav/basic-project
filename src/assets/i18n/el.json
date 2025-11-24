@@ -18,7 +18,8 @@
             "data-table": "Πίνακας δεδομένων",
             "profiles": "Προφίλ",
             "food-menu": "Κατάλογος",
-            "custom-form": "Φόρμα"
+            "custom-form": "Φόρμα",
+            "notifications": "Ειδοποιήσεις"
         }
     },
     "auth": {

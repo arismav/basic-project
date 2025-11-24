@@ -1,0 +1,5 @@
+<div class="notification" *ngFor="let n of notifications$ | async">
+    <h4>{{ n.title }}</h4>
+    <p>{{ n.message }}</p>
+    <small>{{ n.timestamp }}</small>
+</div>
